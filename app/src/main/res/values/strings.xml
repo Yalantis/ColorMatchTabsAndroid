@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ColorTabs</string>
+    <string name="products">Products</string>
+    <string name="venues">Venues</string>
+    <string name="reviews">Reviews</string>
+    <string name="friends">Friends</string>
+</resources>

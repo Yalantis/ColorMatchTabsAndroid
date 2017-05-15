@@ -1,0 +1,30 @@
+bin
+gen
+
+# local
+local.properties
+
+proguard_logs/
+
+# log files
+log*.txt
+
+# archives
+*.gz
+*.tar
+*.zip
+
+# eclipse
+*.metadata
+*.settings
+*.prefs
+
+#idea
+*.idea
+*.iml
+out/
+
+build/
+.gradle/
+
+.DS_Store
