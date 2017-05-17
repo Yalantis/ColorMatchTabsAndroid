@@ -165,7 +165,7 @@ class ColorMatchTabLayout : HorizontalScrollView {
         tabSelectedListener?.onSelectedTab(colorTab)
     }
 
-    private fun getSelectedTabView(): ColorTabView? {
+    internal fun getSelectedTabView(): ColorTabView? {
         return tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
     }
 
