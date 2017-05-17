@@ -65,7 +65,7 @@ class SlidingTabStrip : LinearLayout {
         val left = if (child.tab?.position == 0) child.x.minus(getDimen(R.dimen.radius)) else child.x
         val right = if (child.tab?.position == parentLayout?.count()?.minus(1)) child.x.plus(child.width).plus(getDimen(R.dimen.radius)) else child.x.plus(child.width)
         val rectangle = RectF(left, 0f, right, child.height.toFloat())
-        canvas?.drawRoundRect(rectangle, getDimen(R.dimen.radius), getDimen(R.dimen.radius), backgroundPaint)
+        canvas?.drawRoundRect(rectangle, getDimenToFloat(R.dimen.radius), getDimenToFloat(R.dimen.radius), backgroundPaint)
     }
 
     internal fun animateDrawTab(child: ColorTabView?) {
@@ -100,7 +100,7 @@ class SlidingTabStrip : LinearLayout {
         val left = if (child.tab?.position == 0) leftX.minus(getDimen(R.dimen.radius)) else leftX
         val right = if (child.tab?.position == parentLayout?.count()?.minus(1)) leftX.plus(child.width).plus(getDimen(R.dimen.radius)) else leftX.plus(child.width)
         val rectangle = RectF(left, 0f, right, child.height.toFloat())
-        canvas?.drawRoundRect(rectangle, getDimen(R.dimen.radius), getDimen(R.dimen.radius), backgroundPaint)
+        canvas?.drawRoundRect(rectangle, getDimenToFloat(R.dimen.radius), getDimenToFloat(R.dimen.radius), backgroundPaint)
     }
 
 }

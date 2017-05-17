@@ -20,12 +20,6 @@ import android.widget.TextView
  */
 class ColorTabView : LinearLayout, View.OnClickListener {
 
-    companion object {
-        private const val NORMAL_VIEWS_MARGIN = 16
-        private const val RADIUS = 22
-        private const val TAB_MAX_WIDTH = 132
-    }
-
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
@@ -39,7 +33,6 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         }
 
     internal var parentLayout: ColorMatchTabLayout? = null
-
 
     fun initColorTabView() {
         gravity = Gravity.CENTER
@@ -81,11 +74,11 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         val maxWidth = parentLayout?.tabMaxWidth
 
         val widthMeasureSpec: Int
-        val heightMeasureSpec = origHeightMeasureSpec  - dpToPx(4)
+        val heightMeasureSpec = origHeightMeasureSpec  - getDimen(R.dimen.tab_padding)
         if (maxWidth ?: 0 > 0 && (specWidthMode == MeasureSpec.UNSPECIFIED || specWidthSize > maxWidth ?: 0)) {
             // If we have a max width and a given spec which is either unspecified or
             // larger than the max width, update the width spec using the same mode
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) dpToPx(TAB_MAX_WIDTH) else maxWidth ?: 0, MeasureSpec.EXACTLY)
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) getDimen(R.dimen.tab_max_width) else maxWidth ?: 0, MeasureSpec.EXACTLY)
         } else {
             // Else, use the original width spec
             widthMeasureSpec = origWidthMeasureSpec
@@ -95,11 +88,10 @@ class ColorTabView : LinearLayout, View.OnClickListener {
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         super.onLayout(changed, l, t, r, b)
-        iconView.setPadding(dpToPx(NORMAL_VIEWS_MARGIN), 0, dpToPx(NORMAL_VIEWS_MARGIN), 0)
-        textView.setPadding(0, 0, dpToPx(NORMAL_VIEWS_MARGIN), 0)
+        iconView.setPadding(getDimen(R.dimen.normal_margin), 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
+        textView.setPadding(0, 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
         if(clickedTabView != null) {
             parentLayout?.tabStrip?.animateDrawTab(clickedTabView)
-            Log.e("OnLayout", "work")
         }
     }
 

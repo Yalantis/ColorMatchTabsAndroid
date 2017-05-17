@@ -14,9 +14,6 @@ class ColorMatchTabLayout : HorizontalScrollView {
 
     companion object {
         private const val INVALID_WIDTH = -1
-        internal const val DEFAULT_HEIGHT = 48
-        internal const val DEFAULT_WIDTH = 56
-        private const val TAB_MAX_WIDTH = 132
     }
 
     internal lateinit var tabStrip: SlidingTabStrip
@@ -52,7 +49,7 @@ class ColorMatchTabLayout : HorizontalScrollView {
         var heightMeasureSpec = heightMeasureSpec
         // If we have a MeasureSpec which allows us to decide our height, try and use the default
         // height
-        val idealHeight = (dpToPx(DEFAULT_HEIGHT) + paddingTop + paddingBottom)
+        val idealHeight = (getDimen(R.dimen.default_height) + paddingTop + paddingBottom)
         when (MeasureSpec.getMode(heightMeasureSpec)) {
             MeasureSpec.AT_MOST -> heightMeasureSpec = MeasureSpec.makeMeasureSpec(
                     Math.min(idealHeight, MeasureSpec.getSize(heightMeasureSpec)),
@@ -64,8 +61,8 @@ class ColorMatchTabLayout : HorizontalScrollView {
             // If we don't have an unspecified width spec, use the given size to calculate
             // the max tab width
             val systemService = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val probable = (systemService.defaultDisplay.width - dpToPx(TAB_MAX_WIDTH)) / (tabs.size - 1)
-            tabMaxWidth = if (probable < dpToPx(DEFAULT_WIDTH)) dpToPx(DEFAULT_WIDTH) else probable
+            val probable = (systemService.defaultDisplay.width - getDimen(R.dimen.tab_max_width)) / (tabs.size - 1)
+            tabMaxWidth = if (probable < getDimen(R.dimen.default_width)) getDimen(R.dimen.default_width) else probable
         }
 
         // Now super measure itself using the (possibly) modified height spec

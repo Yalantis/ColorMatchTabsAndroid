@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="radius">22dp</dimen>
+    <dimen name="tab_max_width">132dp</dimen>
+    <dimen name="normal_margin">16dp</dimen>
+    <dimen name="default_width">56dp</dimen>
+    <dimen name="default_height">48dp</dimen>
+    <dimen name="tab_padding">4dp</dimen>
 </resources>
