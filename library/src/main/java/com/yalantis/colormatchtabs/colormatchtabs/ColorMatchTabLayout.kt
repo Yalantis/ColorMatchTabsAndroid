@@ -169,7 +169,4 @@ class ColorMatchTabLayout : HorizontalScrollView {
         return tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
     }
 
-    private fun dpToPx(dps: Int): Int {
-        return Math.round(resources.displayMetrics.density * dps)
-    }
 }

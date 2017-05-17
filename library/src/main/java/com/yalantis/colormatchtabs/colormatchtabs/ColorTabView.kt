@@ -116,18 +116,11 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     internal var clickedTabView: ColorTabView? = null
 
     override fun onClick(v: View?) {
-        Log.e("OnClick", "start")
-        Log.e("OnClick", parentLayout?.tabStrip?.isAnimate.toString())
         if(!(parentLayout?.tabStrip?.isAnimate ?: false)) {
-            Log.e("OnClick", "work")
             val clickedTabView = v as ColorTabView?
             parentLayout?.select(clickedTabView?.tab)
             this.clickedTabView = clickedTabView
         }
-    }
-
-    private fun dpToPx(dps: Int): Int {
-        return Math.round(resources.displayMetrics.density * dps)
     }
 
 }
