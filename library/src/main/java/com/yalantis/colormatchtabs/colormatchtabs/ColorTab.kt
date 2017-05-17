@@ -1,4 +1,4 @@
-package com.yalantis.colormatchtabs.colortabs
+package com.yalantis.colormatchtabs.colormatchtabs
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable

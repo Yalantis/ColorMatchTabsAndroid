@@ -1,17 +1,19 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
+
     defaultConfig {
-        applicationId "com.yalantis.colormatchtabs.colortabs"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -35,8 +37,5 @@ dependencies {
 
     //UploadImages
     compile 'com.facebook.fresco:fresco:1.1.0'
-    compile project(path: ':library')
-}
-repositories {
-    mavenCentral()
+
 }
