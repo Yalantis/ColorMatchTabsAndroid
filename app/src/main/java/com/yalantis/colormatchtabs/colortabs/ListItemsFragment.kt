@@ -1,4 +1,4 @@
-package com.yalantis.colormatchtabs.colortabs.demo
+package com.yalantis.colormatchtabs.colortabs
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

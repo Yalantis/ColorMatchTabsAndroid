@@ -1,13 +1,12 @@
-package com.yalantis.colormatchtabs.colortabs.demo
+package com.yalantis.colormatchtabs.colortabs
 
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.yalantis.colormatchtabs.colortabs.ColorTab
-import com.yalantis.colormatchtabs.colortabs.ColorTabLayoutOnPageChangeListener
-import com.yalantis.colormatchtabs.colortabs.OnColorTabSelectedListener
-import com.yalantis.colormatchtabs.colortabs.R
+import com.yalantis.colormatchtabs.colormatchtabs.ColorTab
+import com.yalantis.colormatchtabs.colormatchtabs.ColorTabLayoutOnPageChangeListener
+import com.yalantis.colormatchtabs.colormatchtabs.OnColorTabSelectedListener
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

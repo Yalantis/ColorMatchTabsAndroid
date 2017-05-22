@@ -1,14 +1,12 @@
-package com.yalantis.colormatchtabs.colortabs
+package com.yalantis.colormatchtabs.colormatchtabs
 
 import android.annotation.TargetApi
 import android.content.Context
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
 import android.os.Build
 import android.support.v7.app.ActionBar
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
@@ -34,9 +32,6 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         initColorTabView()
     }
 
-    private lateinit var backgroundPaint: Paint
-    private var backgroundCanvas: Canvas? = null
-
     internal var tab: ColorTab? = null
         set(value) {
             field = value
@@ -45,25 +40,22 @@ class ColorTabView : LinearLayout, View.OnClickListener {
 
     internal var parentLayout: ColorMatchTabLayout? = null
 
+
     fun initColorTabView() {
         gravity = Gravity.CENTER
         orientation = HORIZONTAL
         isClickable = true
-        initCanvas()
+        setBackgroundColor(Color.TRANSPARENT)
         initViews()
         this.setOnClickListener(this@ColorTabView)
     }
 
     private fun initViews() {
         iconView = ImageView(context)
+        iconView.setBackgroundColor(Color.TRANSPARENT)
         addView(iconView)
         textView = TextView(context)
         addView(textView)
-    }
-
-    private fun initCanvas() {
-        backgroundPaint = Paint()
-        backgroundPaint.flags = Paint.ANTI_ALIAS_FLAG
     }
 
     private lateinit var textView: TextView
@@ -84,16 +76,16 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     }
 
     override fun onMeasure(origWidthMeasureSpec: Int, origHeightMeasureSpec: Int) {
-        val specWidthSize = View.MeasureSpec.getSize(origWidthMeasureSpec)
-        val specWidthMode = View.MeasureSpec.getMode(origWidthMeasureSpec)
+        val specWidthSize = MeasureSpec.getSize(origWidthMeasureSpec)
+        val specWidthMode = MeasureSpec.getMode(origWidthMeasureSpec)
         val maxWidth = parentLayout?.tabMaxWidth
 
         val widthMeasureSpec: Int
-        val heightMeasureSpec = origHeightMeasureSpec  - dpToPx(8)
-        if (maxWidth ?: 0 > 0 && (specWidthMode == View.MeasureSpec.UNSPECIFIED || specWidthSize > maxWidth ?: 0)) {
+        val heightMeasureSpec = origHeightMeasureSpec  - dpToPx(4)
+        if (maxWidth ?: 0 > 0 && (specWidthMode == MeasureSpec.UNSPECIFIED || specWidthSize > maxWidth ?: 0)) {
             // If we have a max width and a given spec which is either unspecified or
             // larger than the max width, update the width spec using the same mode
-            widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) dpToPx(TAB_MAX_WIDTH) else maxWidth ?: 0, View.MeasureSpec.EXACTLY)
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) dpToPx(TAB_MAX_WIDTH) else maxWidth ?: 0, MeasureSpec.EXACTLY)
         } else {
             // Else, use the original width spec
             widthMeasureSpec = origWidthMeasureSpec
@@ -105,6 +97,10 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         super.onLayout(changed, l, t, r, b)
         iconView.setPadding(dpToPx(NORMAL_VIEWS_MARGIN), 0, dpToPx(NORMAL_VIEWS_MARGIN), 0)
         textView.setPadding(0, 0, dpToPx(NORMAL_VIEWS_MARGIN), 0)
+        if(clickedTabView != null) {
+            parentLayout?.tabStrip?.animateDrawTab(clickedTabView)
+            Log.e("OnLayout", "work")
+        }
     }
 
     fun updateView() {
@@ -122,34 +118,20 @@ class ColorTabView : LinearLayout, View.OnClickListener {
             iconView.requestLayout()
         }
 
-        setBackgroundColor(tab?.tabColor ?: Color.WHITE)
         requestLayout()
     }
 
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-        backgroundCanvas = canvas
-        if (tab?.isSelected ?: false) {
-            backgroundPaint.color = tab?.selectedColor ?: Color.WHITE
-        } else {
-            backgroundPaint.color = tab?.tabColor ?: Color.WHITE
-        }
-        drawBackgroundTab(canvas)
-    }
-
-    private fun drawBackgroundTab(canvas: Canvas?) {
-        if (tab?.position == 0) {
-            canvas?.drawRect(RectF(0f, 0f, width.toFloat() - dpToPx(RADIUS).toFloat(), height.toFloat()), backgroundPaint)
-        } else if (tab?.position == parentLayout?.count()?.minus(1)) {
-            canvas?.drawRect(RectF(dpToPx(RADIUS).toFloat(), 0f, width.toFloat(), height.toFloat()), backgroundPaint)
-        }
-        canvas?.drawRoundRect(RectF(0f, 0f, width.toFloat(), height.toFloat()), dpToPx(RADIUS).toFloat(), dpToPx(RADIUS).toFloat(), backgroundPaint)
-    }
+    internal var clickedTabView: ColorTabView? = null
 
     override fun onClick(v: View?) {
-        val clickedTabView = v as ColorTabView?
-        parentLayout?.select(clickedTabView?.tab)
-        invalidate()
+        Log.e("OnClick", "start")
+        Log.e("OnClick", parentLayout?.tabStrip?.isAnimate.toString())
+        if(!(parentLayout?.tabStrip?.isAnimate ?: false)) {
+            Log.e("OnClick", "work")
+            val clickedTabView = v as ColorTabView?
+            parentLayout?.select(clickedTabView?.tab)
+            this.clickedTabView = clickedTabView
+        }
     }
 
     private fun dpToPx(dps: Int): Int {
