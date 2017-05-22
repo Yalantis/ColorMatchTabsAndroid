@@ -29,7 +29,7 @@ class ColorTabLayoutOnPageChangeListener(colorTabLayout: ColorMatchTabLayout) : 
 
     override fun onPageSelected(position: Int) {
         val tabLayout = tabLayoutReference.get()
-        if(!(tabLayout?.tabStrip?.isAnimate ?: false)) {
+        if(tabLayout?.tabStrip?.isAnimate?.not() ?: true)  {
             tabLayout?.select(tabLayout.getTabAt(position))
             tabLayout?.getSelectedTabView()?.clickedTabView = tabLayout?.getSelectedTabView()
         }
