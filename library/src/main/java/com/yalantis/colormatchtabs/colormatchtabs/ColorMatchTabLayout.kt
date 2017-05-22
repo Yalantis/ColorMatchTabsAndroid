@@ -86,16 +86,14 @@ class ColorMatchTabLayout : HorizontalScrollView {
         tabStrip.addView(tab.tabView, tab.position, createLayoutParamsForTabs())
     }
 
-    fun newTab(): ColorTab = ColorTab().apply {
+    fun newTab() = ColorTab().apply {
         tabView = createTabView(this)
     }
 
 
-    fun createTabView(tab: ColorTab): ColorTabView {
-        val colorTabView = ColorTabView(context)
-        colorTabView.tab = tab
-        colorTabView.parentLayout = this
-        return colorTabView
+    fun createTabView(tab: ColorTab) = ColorTabView(context).apply {
+        this.tab = tab
+        this.parentLayout = this@ColorMatchTabLayout
     }
 
     private fun configureTab(tab: ColorTab, position: Int) {
@@ -168,9 +166,7 @@ class ColorMatchTabLayout : HorizontalScrollView {
         tabSelectedListener?.onSelectedTab(colorTab)
     }
 
-    private fun getSelectedTabView(): ColorTabView? {
-        return tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
-    }
+    private fun getSelectedTabView() = tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
 
     private fun dpToPx(dps: Int): Int {
         return Math.round(resources.displayMetrics.density * dps)
