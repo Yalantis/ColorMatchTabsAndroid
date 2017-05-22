@@ -3,7 +3,10 @@ package com.yalantis.colormatchtabs.colormatchtabs
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.os.Build
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
 import android.util.AttributeSet
 import android.util.Log
@@ -33,6 +36,8 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         }
 
     internal var parentLayout: ColorMatchTabLayout? = null
+    private lateinit var textView: TextView
+    internal lateinit var iconView: ImageView
 
     fun initColorTabView() {
         gravity = Gravity.CENTER
@@ -51,8 +56,6 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         addView(textView)
     }
 
-    private lateinit var textView: TextView
-    private lateinit var iconView: ImageView
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onInitializeAccessibilityEvent(event: AccessibilityEvent) {
@@ -100,13 +103,14 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         if (tab?.isSelected ?: false) {
             textView.visibility = View.VISIBLE
             textView.text = colorTab?.text
-            textView.setTextColor(Color.BLACK)
+            textView.setTextColor(Color.WHITE)
             textView.requestLayout()
         } else {
             textView.visibility = View.GONE
         }
         if (colorTab?.icon != null) {
             iconView.setImageDrawable(colorTab.icon)
+            reColorDrawable(colorTab.isSelected)
             iconView.requestLayout()
         }
 
@@ -120,6 +124,15 @@ class ColorTabView : LinearLayout, View.OnClickListener {
             val clickedTabView = v as ColorTabView?
             parentLayout?.select(clickedTabView?.tab)
             this.clickedTabView = clickedTabView
+        }
+    }
+
+    internal fun reColorDrawable(isSelected: Boolean) {
+        if (isSelected) {
+            iconView.colorFilter = null
+            iconView.setColorFilter(Color.parseColor("#ffffff"), PorterDuff.Mode.SRC_ATOP)
+        } else {
+            iconView.setColorFilter(tab?.selectedColor ?: 0, PorterDuff.Mode.SRC_ATOP)
         }
     }
 

@@ -18,38 +18,28 @@ class MainActivity : AppCompatActivity() {
 
         val firstTab = tabLayout.newTab()
         firstTab.text = getString(R.string.products)
-        firstTab.selectedColor = Color.GREEN
-        firstTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
+        firstTab.selectedColor = Color.parseColor("#79BC32")
+        firstTab.icon = resources.getDrawable(R.drawable.reviews_selected)
 
         val secondTab = tabLayout.newTab()
         secondTab.text = getString(R.string.venues)
-        secondTab.selectedColor = Color.GREEN
-        secondTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
+        secondTab.selectedColor = Color.parseColor("#3DB4F8")
+        secondTab.icon = resources.getDrawable(R.drawable.goods)
 
         val thirdTab = tabLayout.newTab()
         thirdTab.text = getString(R.string.reviews)
-        thirdTab.selectedColor = Color.GREEN
-        thirdTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
+        thirdTab.selectedColor = Color.parseColor("#F89900")
+        thirdTab.icon = resources.getDrawable(R.drawable.venues)
 
         val fourthTab = tabLayout.newTab()
         fourthTab.text = getString(R.string.friends)
-        fourthTab.selectedColor = Color.GREEN
-        fourthTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
-
-        val fiveTab = tabLayout.newTab()
-        fiveTab.text = getString(R.string.friends)
-        fiveTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
-
-        val sixTab = tabLayout.newTab()
-        sixTab.text = getString(R.string.friends)
-        sixTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
+        fourthTab.selectedColor = Color.parseColor("#EB8487")
+        fourthTab.icon = resources.getDrawable(R.drawable.users)
 
         tabLayout.addTab(firstTab)
         tabLayout.addTab(secondTab)
         tabLayout.addTab(thirdTab)
         tabLayout.addTab(fourthTab)
-        tabLayout.addTab(fiveTab)
-        tabLayout.addTab(sixTab)
 
         pager.adapter = ColorTabsAdapter(supportFragmentManager, tabLayout.count())
         pager.addOnPageChangeListener(ColorTabLayoutOnPageChangeListener(tabLayout))
