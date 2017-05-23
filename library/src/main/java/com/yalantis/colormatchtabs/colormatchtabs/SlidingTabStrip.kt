@@ -1,6 +1,7 @@
 package com.yalantis.colormatchtabs.colormatchtabs
 
 import android.animation.Animator
+import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -10,12 +11,17 @@ import android.graphics.RectF
 import android.support.v4.view.animation.PathInterpolatorCompat
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.animation.AnimationSet
 import android.widget.LinearLayout
 
 /**
  * Created by anna on 11.05.17.
  */
-class SlidingTabStrip : LinearLayout {
+class SlidingTabStrip : LinearLayout, MenuToggleListener {
+
+    companion object {
+        private const val ANIMATION_DURATON = 200L
+    }
 
     var parentLayout: ColorMatchTabLayout? = null
     private lateinit var backgroundPaint: Paint
@@ -24,6 +30,9 @@ class SlidingTabStrip : LinearLayout {
     internal var childView: ColorTabView? = null
     internal var isAnimate: Boolean = false
     private var animateLeftX = 0f
+    internal val menuToggleListener: MenuToggleListener = this
+    private var isMenuToggle: Boolean = false
+
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -41,17 +50,21 @@ class SlidingTabStrip : LinearLayout {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        (0..childCount - 1).forEach {
-            val child = getChildAt(it) as ColorTabView
-            backgroundCanvas = canvas
-            if (child.tab?.isSelected ?: false) {
-                backgroundPaint.color = child.tab?.selectedColor ?: Color.WHITE
-            }
-            if (child.tab?.isSelected ?: false && isAnimate) {
-                childView = child
-                animateRectangle(child, canvas)
-            } else if (child.tab?.isSelected ?: false && !isAnimate) {
-                drawBackgroundTab(child, canvas)
+        if (isMenuToggle) {
+
+        } else {
+            (0..childCount - 1).forEach {
+                val child = getChildAt(it) as ColorTabView
+                backgroundCanvas = canvas
+                if (child.tab?.isSelected ?: false) {
+                    backgroundPaint.color = child.tab?.selectedColor ?: Color.WHITE
+                }
+                if (child.tab?.isSelected ?: false && isAnimate) {
+                    childView = child
+                    animateRectangle(child, canvas)
+                } else if (child.tab?.isSelected ?: false && !isAnimate) {
+                    drawBackgroundTab(child, canvas)
+                }
             }
         }
     }
@@ -70,7 +83,7 @@ class SlidingTabStrip : LinearLayout {
 
     internal fun animateDrawTab(child: ColorTabView?) {
         ValueAnimator.ofFloat(parentLayout?.previousSelectedTab?.x ?: 0f, child?.x ?: 0f).apply {
-            duration = 200
+            duration = ANIMATION_DURATON
             interpolator = PathInterpolatorCompat.create(0.175f, 0.885f, 0.360f, 1.200f)
             addUpdateListener {
                 animateLeftX = animatedValue as Float
@@ -101,6 +114,50 @@ class SlidingTabStrip : LinearLayout {
         val right = if (child.tab?.position == parentLayout?.count()?.minus(1)) leftX.plus(child.width).plus(getDimen(R.dimen.radius)) else leftX.plus(child.width)
         val rectangle = RectF(left, 0f, right, child.height.toFloat())
         canvas?.drawRoundRect(rectangle, getDimenToFloat(R.dimen.radius), getDimenToFloat(R.dimen.radius), backgroundPaint)
+    }
+
+    override fun onOpenMenu() {
+        animateIconTabs(0f, (height * 2).toFloat())
+    }
+
+    override fun onCloseMenu() {
+        animateIconTabs((height * 2).toFloat(), 0f)
+    }
+
+    private fun animateIconTabs(start: Float, end: Float) {
+        ValueAnimator.ofFloat(start, end).apply {
+            duration = ANIMATION_DURATON
+            addUpdateListener {
+                (0..childCount - 1).forEach {
+                    val child = getChildAt(it) as ColorTabView
+                    child.iconView.translationY = animatedValue as Float
+                }
+            }
+            addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    isMenuToggle = false
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                    if (end == 0f) {
+                        parentLayout?.tabs?.forEach {
+                            it.icon?.setBounds(0, 0, it.icon?.intrinsicWidth ?: 0, it.icon?.intrinsicHeight ?: 0)
+                        }
+                        (0..childCount - 1).forEach {
+                            val child = getChildAt(it) as ColorTabView
+                            child.reColorDrawable(child.tab?.isSelected ?: false)
+                        }
+                    }
+                    isMenuToggle = true
+                }
+            })
+        }.start()
     }
 
 }

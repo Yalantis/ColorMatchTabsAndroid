@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.WindowManager
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
+import com.yalantis.colormatchtabs.colormatchtabs.menu.ArcMenu
 
 /**
  * Created by anna on 10.05.17.
@@ -17,11 +18,12 @@ class ColorMatchTabLayout : HorizontalScrollView {
     }
 
     internal lateinit var tabStrip: SlidingTabStrip
-    private var tabs: MutableList<ColorTab> = mutableListOf()
+    internal var tabs: MutableList<ColorTab> = mutableListOf()
     private var tabSelectedListener: OnColorTabSelectedListener? = null
     internal var selectedTab: ColorTab? = null
     internal var tabMaxWidth = Integer.MAX_VALUE
     internal var previousSelectedTab: ColorTabView? = null
+    internal var arcMenu: ArcMenu? = null
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -163,6 +165,12 @@ class ColorMatchTabLayout : HorizontalScrollView {
         tabSelectedListener?.onSelectedTab(colorTab)
     }
 
-    private fun getSelectedTabView() = tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
+    internal fun getSelectedTabView() = tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
+
+    fun addArcMenu(arcMenu: ArcMenu) {
+        this.arcMenu = arcMenu
+        this.arcMenu?.tabs = tabs
+        this.arcMenu?.menuToggleListener = tabStrip.menuToggleListener
+    }
 
 }

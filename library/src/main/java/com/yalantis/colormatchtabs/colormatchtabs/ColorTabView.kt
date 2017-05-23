@@ -109,6 +109,8 @@ class ColorTabView : LinearLayout, View.OnClickListener {
             textView.visibility = View.GONE
         }
         if (colorTab?.icon != null) {
+            Log.e("ICON", iconView.x.toString())
+            Log.e("ICON", iconView.y.toString())
             iconView.setImageDrawable(colorTab.icon)
             reColorDrawable(colorTab.isSelected)
             iconView.requestLayout()
