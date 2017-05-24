@@ -35,9 +35,9 @@ class ColorTabView : LinearLayout, View.OnClickListener {
             updateView()
         }
 
-    internal var parentLayout: ColorMatchTabLayout? = null
     private lateinit var textView: TextView
     internal lateinit var iconView: ImageView
+    internal var clickedTabView: ColorTabView? = null
 
     fun initColorTabView() {
         gravity = Gravity.CENTER
@@ -74,14 +74,14 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     override fun onMeasure(origWidthMeasureSpec: Int, origHeightMeasureSpec: Int) {
         val specWidthSize = MeasureSpec.getSize(origWidthMeasureSpec)
         val specWidthMode = MeasureSpec.getMode(origWidthMeasureSpec)
-        val maxWidth = parentLayout?.tabMaxWidth
+        val maxWidth = (parent.parent as ColorMatchTabLayout).tabMaxWidth
 
         val widthMeasureSpec: Int
         val heightMeasureSpec = origHeightMeasureSpec  - getDimen(R.dimen.tab_padding)
-        if (maxWidth ?: 0 > 0 && (specWidthMode == MeasureSpec.UNSPECIFIED || specWidthSize > maxWidth ?: 0)) {
+        if (maxWidth > 0 && (specWidthMode == MeasureSpec.UNSPECIFIED || specWidthSize > maxWidth)) {
             // If we have a max width and a given spec which is either unspecified or
             // larger than the max width, update the width spec using the same mode
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) getDimen(R.dimen.tab_max_width) else maxWidth ?: 0, MeasureSpec.EXACTLY)
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) getDimen(R.dimen.tab_max_width) else maxWidth, MeasureSpec.EXACTLY)
         } else {
             // Else, use the original width spec
             widthMeasureSpec = origWidthMeasureSpec
@@ -94,7 +94,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         iconView.setPadding(getDimen(R.dimen.normal_margin), 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
         textView.setPadding(0, 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
         if(clickedTabView != null) {
-            parentLayout?.tabStrip?.animateDrawTab(clickedTabView)
+            (parent as SlidingTabStrip).animateDrawTab(clickedTabView)
         }
     }
 
@@ -109,22 +109,17 @@ class ColorTabView : LinearLayout, View.OnClickListener {
             textView.visibility = View.GONE
         }
         if (colorTab?.icon != null) {
-            Log.e("ICON", iconView.x.toString())
-            Log.e("ICON", iconView.y.toString())
             iconView.setImageDrawable(colorTab.icon)
             reColorDrawable(colorTab.isSelected)
             iconView.requestLayout()
         }
-
         requestLayout()
     }
 
-    internal var clickedTabView: ColorTabView? = null
-
     override fun onClick(v: View?) {
-        if(!(parentLayout?.tabStrip?.isAnimate ?: false)) {
+        if(!(parent as SlidingTabStrip).isAnimate) {
             val clickedTabView = v as ColorTabView?
-            parentLayout?.select(clickedTabView?.tab)
+            (parent.parent as ColorMatchTabLayout).select(clickedTabView?.tab)
             this.clickedTabView = clickedTabView
         }
     }
@@ -132,7 +127,8 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     internal fun reColorDrawable(isSelected: Boolean) {
         if (isSelected) {
             iconView.colorFilter = null
-            iconView.setColorFilter(Color.parseColor("#ffffff"), PorterDuff.Mode.SRC_ATOP)
+            //TODO get white color from color for ColorMatchTabsLayout
+            iconView.setColorFilter(getColor(R.color.mainBackgroundColor), PorterDuff.Mode.SRC_ATOP)
         } else {
             iconView.setColorFilter(tab?.selectedColor ?: 0, PorterDuff.Mode.SRC_ATOP)
         }

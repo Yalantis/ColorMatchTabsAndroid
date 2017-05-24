@@ -21,6 +21,11 @@ class ColorMatchTabLayout : HorizontalScrollView {
     internal var tabs: MutableList<ColorTab> = mutableListOf()
     private var tabSelectedListener: OnColorTabSelectedListener? = null
     internal var selectedTab: ColorTab? = null
+    internal var backgroundColor: Int = getColor(R.color.mainBackgroundColor)
+        set(value) {
+            field = value
+            setBackgroundColor(value)
+        }
     internal var tabMaxWidth = Integer.MAX_VALUE
     internal var previousSelectedTab: ColorTabView? = null
     internal var arcMenu: ArcMenu? = null
@@ -34,7 +39,6 @@ class ColorMatchTabLayout : HorizontalScrollView {
     private fun initLayout(attrs: AttributeSet?, defStyleAttr: Int) {
         isHorizontalScrollBarEnabled = false
         tabStrip = SlidingTabStrip(context)
-        tabStrip.parentLayout = this
         super.addView(tabStrip, 0, LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorMatchTabLayout)
@@ -89,10 +93,8 @@ class ColorMatchTabLayout : HorizontalScrollView {
         tabView = createTabView(this)
     }
 
-
     fun createTabView(tab: ColorTab) = ColorTabView(context).apply {
         this.tab = tab
-        this.parentLayout = this@ColorMatchTabLayout
     }
 
     private fun configureTab(tab: ColorTab, position: Int) {
@@ -113,8 +115,7 @@ class ColorMatchTabLayout : HorizontalScrollView {
     }
 
     private fun updateTabViewLayoutParams(lp: LinearLayout.LayoutParams) {
-            lp.width = LinearLayout.LayoutParams.WRAP_CONTENT
-            lp.weight = 0f
+        lp.width = LinearLayout.LayoutParams.WRAP_CONTENT
     }
 
     fun count() = tabs.size
@@ -123,13 +124,13 @@ class ColorMatchTabLayout : HorizontalScrollView {
         if (index < 0 || index >= count()) {
             return null
         } else {
-            return tabs.get(index)
+            return tabs[index]
         }
     }
 
     internal fun setScrollPosition(position: Int, positionOffset: Float, updateSelectedText: Boolean) {
         val roundedPosition = Math.round(position + positionOffset)
-        if (roundedPosition < 0 || roundedPosition >= tabStrip.getChildCount()) {
+        if (roundedPosition < 0 || roundedPosition >= tabStrip.childCount) {
             return
         }
 

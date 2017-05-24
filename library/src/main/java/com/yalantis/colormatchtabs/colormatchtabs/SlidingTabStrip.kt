@@ -21,18 +21,19 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
 
     companion object {
         private const val ANIMATION_DURATON = 200L
+        private const val CONTROL_X1 = 0.175f
+        private const val CONTROL_Y1 = 0.885f
+        private const val CONTROL_X2 = 0.360f
+        private const val CONTROL_Y2 = 1.200f
+        private const val FIRST_TAB_POSITION = 0
     }
 
-    var parentLayout: ColorMatchTabLayout? = null
     private lateinit var backgroundPaint: Paint
     private var backgroundCanvas: Canvas? = null
-
-    internal var childView: ColorTabView? = null
     internal var isAnimate: Boolean = false
     private var animateLeftX = 0f
     internal val menuToggleListener: MenuToggleListener = this
     private var isMenuToggle: Boolean = false
-
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -43,10 +44,19 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
         initCanvas()
     }
 
+    /**
+     * The method creates the Paint() object to create a rectangle and passes it Paint.ANTI_ALIAS_FLAG
+     * that smooths the edges of the rectangle
+     */
+
     private fun initCanvas() {
         backgroundPaint = Paint()
         backgroundPaint.flags = Paint.ANTI_ALIAS_FLAG
     }
+
+    /**
+     * The method draw rectangle for selected tab and animate it if it is necessary
+     */
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -60,7 +70,6 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
                     backgroundPaint.color = child.tab?.selectedColor ?: Color.WHITE
                 }
                 if (child.tab?.isSelected ?: false && isAnimate) {
-                    childView = child
                     animateRectangle(child, canvas)
                 } else if (child.tab?.isSelected ?: false && !isAnimate) {
                     drawBackgroundTab(child, canvas)
@@ -69,22 +78,22 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
         }
     }
 
+    /**
+     * Draw a rectangle if it is not animated
+     */
+
     private fun drawBackgroundTab(child: ColorTabView, canvas: Canvas?) {
-        if (child.tab?.position == 0) {
-            canvas?.drawRect(RectF(child.x, 0f, (child.x + child.width.toFloat() - getDimen(R.dimen.radius)), child.height.toFloat()), backgroundPaint)
-        } else if (child.tab?.position == parentLayout?.count()?.minus(1)) {
-            canvas?.drawRect(RectF((child.x + getDimen(R.dimen.radius)), 0f, (child.x + child.width.toFloat()), child.height.toFloat()), backgroundPaint)
-        }
-        val left = if (child.tab?.position == 0) child.x.minus(getDimen(R.dimen.radius)) else child.x
-        val right = if (child.tab?.position == parentLayout?.count()?.minus(1)) child.x.plus(child.width).plus(getDimen(R.dimen.radius)) else child.x.plus(child.width)
-        val rectangle = RectF(left, 0f, right, child.height.toFloat())
-        canvas?.drawRoundRect(rectangle, getDimenToFloat(R.dimen.radius), getDimenToFloat(R.dimen.radius), backgroundPaint)
+        drawRectangle(child, canvas, false)
     }
 
+    /**
+     * Animate the selected tab rectangle. Called in onLayout() method of ColorTabView
+     */
+
     internal fun animateDrawTab(child: ColorTabView?) {
-        ValueAnimator.ofFloat(parentLayout?.previousSelectedTab?.x ?: 0f, child?.x ?: 0f).apply {
+        ValueAnimator.ofFloat((parent as ColorMatchTabLayout).previousSelectedTab?.x ?: 0f, child?.x ?: 0f).apply {
             duration = ANIMATION_DURATON
-            interpolator = PathInterpolatorCompat.create(0.175f, 0.885f, 0.360f, 1.200f)
+            interpolator = PathInterpolatorCompat.create(CONTROL_X1, CONTROL_Y1, CONTROL_X2, CONTROL_Y2)
             addUpdateListener {
                 animateLeftX = animatedValue as Float
                 invalidate()
@@ -108,17 +117,41 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
         }.start()
     }
 
+    /**
+     * Draw a rectangle if it is animated
+     */
+
     private fun animateRectangle(child: ColorTabView, canvas: Canvas?) {
-        var leftX = animateLeftX
-        val left = if (child.tab?.position == 0) leftX.minus(getDimen(R.dimen.radius)) else leftX
-        val right = if (child.tab?.position == parentLayout?.count()?.minus(1)) leftX.plus(child.width).plus(getDimen(R.dimen.radius)) else leftX.plus(child.width)
+       drawRectangle(child, canvas, true)
+    }
+
+    private fun drawRectangle(child: ColorTabView, canvas: Canvas?, isAnimateRectangle: Boolean) {
+        var left = 0f
+        var right = 0f
+
+        if(!isAnimateRectangle) {
+            left = if (child.tab?.position == FIRST_TAB_POSITION) child.x.minus(getDimen(R.dimen.radius)) else child.x
+            right = if (child.tab?.position == (parent as ColorMatchTabLayout).count()?.minus(1)) child.x.plus(child.width).plus(getDimen(R.dimen.radius)) else child.x.plus(child.width)
+        } else {
+            val leftX = animateLeftX
+            left = if (child.tab?.position == FIRST_TAB_POSITION) leftX.minus(getDimen(R.dimen.radius)) else leftX
+            right = if (child.tab?.position == (parent as ColorMatchTabLayout).count()?.minus(1)) leftX.plus(child.width).plus(getDimen(R.dimen.radius)) else leftX.plus(child.width)
+        }
         val rectangle = RectF(left, 0f, right, child.height.toFloat())
         canvas?.drawRoundRect(rectangle, getDimenToFloat(R.dimen.radius), getDimenToFloat(R.dimen.radius), backgroundPaint)
     }
 
+    /**
+     * Animate the icon tabs moving down when the ArcMenu is open
+     */
+
     override fun onOpenMenu() {
         animateIconTabs(0f, (height * 2).toFloat())
     }
+
+    /**
+     * Animate the icon tabs moving up when the ArcMenu is closed
+     */
 
     override fun onCloseMenu() {
         animateIconTabs((height * 2).toFloat(), 0f)
@@ -146,7 +179,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
 
                 override fun onAnimationStart(animation: Animator?) {
                     if (end == 0f) {
-                        parentLayout?.tabs?.forEach {
+                        (parent as ColorMatchTabLayout).tabs?.forEach {
                             it.icon?.setBounds(0, 0, it.icon?.intrinsicWidth ?: 0, it.icon?.intrinsicHeight ?: 0)
                         }
                         (0..childCount - 1).forEach {

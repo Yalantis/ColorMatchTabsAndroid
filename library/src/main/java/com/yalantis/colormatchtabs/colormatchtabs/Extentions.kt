@@ -1,6 +1,8 @@
 package com.yalantis.colormatchtabs.colormatchtabs
 
+import android.support.annotation.ColorRes
 import android.support.annotation.DimenRes
+import android.support.v4.content.ContextCompat
 import android.view.View
 
 /**
@@ -9,3 +11,5 @@ import android.view.View
 fun View.getDimenToFloat(@DimenRes res: Int) = context.resources.getDimensionPixelOffset(res).toFloat()
 
 fun View.getDimen(@DimenRes res: Int) = context.resources.getDimensionPixelOffset(res)
+
+fun View.getColor(@ColorRes res: Int) = ContextCompat.getColor(context, res)

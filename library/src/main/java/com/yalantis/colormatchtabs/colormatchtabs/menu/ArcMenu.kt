@@ -14,10 +14,7 @@ import android.view.Gravity
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
-import com.yalantis.colormatchtabs.colormatchtabs.ColorTab
-import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
-import com.yalantis.colormatchtabs.colormatchtabs.R
-import com.yalantis.colormatchtabs.colormatchtabs.getDimen
+import com.yalantis.colormatchtabs.colormatchtabs.*
 
 /**
  * Created by anna on 19.05.17.
@@ -27,6 +24,7 @@ class ArcMenu : FrameLayout {
     companion object{
         private const val MAX_ANGLE_FOR_MENU = 140.0
         private const val ANIMATION_DURATON = 200L
+        private const val START_MENU_ANGLE = -20.0
     }
 
     private lateinit var fab: FloatingActionButton
@@ -98,13 +96,10 @@ class ArcMenu : FrameLayout {
 
     private fun layoutChildrenArc(canvas: Canvas?) {
         val eachAngle = calculateSubMenuAngle()
-        var childX = 0f
-        var childY = 0f
-
-        var angleForChild = -20.0
+        var angleForChild = START_MENU_ANGLE
         tabs.forEach {
-            childX = ((fab.x + (fab.width/2).toFloat()) - (currentRadius * Math.cos(Math.toRadians(angleForChild))).toFloat())
-            childY = ((fab.y+ (fab.height/2).toFloat()) + (currentRadius * Math.sin(Math.toRadians(angleForChild))).toFloat())
+            val childX = ((fab.x + (fab.width/2).toFloat()) - (currentRadius * Math.cos(Math.toRadians(angleForChild))).toFloat())
+            val childY = ((fab.y+ (fab.height/2).toFloat()) + (currentRadius * Math.sin(Math.toRadians(angleForChild))).toFloat())
             backgroundPaint.color = it.selectedColor
             canvas?.drawCircle(childX, childY, fab.height / 2f, backgroundPaint)
             if(currentRadius == calculateRadius().toFloat() && isMenuOpen) {
@@ -129,7 +124,7 @@ class ArcMenu : FrameLayout {
     private fun animateDrawableAppears(childX: Float, childY: Float, tab: ColorTab, canvas: Canvas?) {
         val left = childX.toInt() - ((tab.icon?.intrinsicWidth ?: 0)/2)
         val top = childY.toInt() - ((tab.icon?.intrinsicHeight ?: 0)/2)
-        tab.icon?.setColorFilter(Color.parseColor("#ffffff"), PorterDuff.Mode.SRC_ATOP)
+        tab.icon?.setColorFilter(getColor(R.color.mainBackgroundColor), PorterDuff.Mode.SRC_ATOP)
         tab.icon?.setBounds(left, top, left + (tab.icon?.intrinsicWidth ?: 0),  top + (tab.icon?.intrinsicHeight ?: 0))
         tab.icon?.draw(canvas)
     }
