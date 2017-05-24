@@ -1,4 +1,4 @@
-package com.yalantis.colormatchtabs.colormatchtabs
+package com.yalantis.colormatchtabs.colormatchtabs.colortabs
 
 import android.animation.Animator
 import android.animation.AnimatorSet
@@ -13,6 +13,11 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.animation.AnimationSet
 import android.widget.LinearLayout
+import com.yalantis.colormatchtabs.colormatchtabs.R
+import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
+import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorTabView
+import com.yalantis.colormatchtabs.colormatchtabs.getDimen
+import com.yalantis.colormatchtabs.colormatchtabs.getDimenToFloat
 
 /**
  * Created by anna on 11.05.17.

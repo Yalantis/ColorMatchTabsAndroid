@@ -17,7 +17,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <com.yalantis.colormatchtabs.colormatchtabs.ColorMatchTabLayout
+    <com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

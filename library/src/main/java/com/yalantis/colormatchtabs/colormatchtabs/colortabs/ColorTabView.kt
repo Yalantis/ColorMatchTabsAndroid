@@ -1,4 +1,4 @@
-package com.yalantis.colormatchtabs.colormatchtabs
+package com.yalantis.colormatchtabs.colormatchtabs.colortabs
 
 import android.annotation.TargetApi
 import android.content.Context
@@ -17,6 +17,10 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.yalantis.colormatchtabs.colormatchtabs.R
+import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
+import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
+import com.yalantis.colormatchtabs.colormatchtabs.getDimen
 
 /**
  * Created by anna on 10.05.17.

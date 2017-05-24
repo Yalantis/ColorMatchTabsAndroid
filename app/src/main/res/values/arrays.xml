@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="colors">
+        <item>#79BC32</item>
+        <item>#3DB4F8</item>
+        <item>#F89900</item>
+        <item>#EB8487</item>
+    </string-array>
+    <integer-array name="icons">
+        <item>@drawable/reviews_selected</item>
+        <item>@drawable/goods</item>
+        <item>@drawable/venues</item>
+        <item>@drawable/users</item>
+    </integer-array>
+    <string-array name="texts">
+        <item>@string/products</item>
+        <item>@string/venues</item>
+        <item>@string/reviews</item>
+        <item>@string/friends</item>
+    </string-array>
+</resources>

@@ -1,9 +1,10 @@
-package com.yalantis.colormatchtabs.colormatchtabs
+package com.yalantis.colormatchtabs.colormatchtabs.listeners
 
 import android.support.v4.view.ViewPager
 import android.support.v4.view.ViewPager.SCROLL_STATE_IDLE
 import android.support.v4.view.ViewPager.SCROLL_STATE_SETTLING
 import android.util.Log
+import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
 import java.lang.ref.WeakReference
 
 /**
@@ -29,7 +30,7 @@ class ColorTabLayoutOnPageChangeListener(colorTabLayout: ColorMatchTabLayout) : 
 
     override fun onPageSelected(position: Int) {
         val tabLayout = tabLayoutReference.get()
-        if(!(tabLayout?.tabStrip?.isAnimate ?: false)) {
+        if(tabLayout?.tabStrip?.isAnimate?.not() ?: true)  {
             tabLayout?.select(tabLayout.getTabAt(position))
             tabLayout?.getSelectedTabView()?.clickedTabView = tabLayout?.getSelectedTabView()
         }
