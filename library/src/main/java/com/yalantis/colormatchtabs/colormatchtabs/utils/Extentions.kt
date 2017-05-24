@@ -1,4 +1,4 @@
-package com.yalantis.colormatchtabs.colormatchtabs
+package com.yalantis.colormatchtabs.colormatchtabs.utils
 
 import android.support.annotation.ColorRes
 import android.support.annotation.DimenRes

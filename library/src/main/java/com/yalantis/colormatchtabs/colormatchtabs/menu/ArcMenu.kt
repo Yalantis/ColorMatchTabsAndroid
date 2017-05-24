@@ -16,6 +16,8 @@ import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import com.yalantis.colormatchtabs.colormatchtabs.*
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
+import com.yalantis.colormatchtabs.colormatchtabs.utils.getColor
+import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimen
 
 /**
  * Created by anna on 19.05.17.
