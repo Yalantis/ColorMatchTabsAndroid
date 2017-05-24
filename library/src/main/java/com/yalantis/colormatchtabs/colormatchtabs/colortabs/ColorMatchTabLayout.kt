@@ -1,4 +1,4 @@
-package com.yalantis.colormatchtabs.colormatchtabs
+package com.yalantis.colormatchtabs.colormatchtabs.colortabs
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -6,6 +6,9 @@ import android.util.AttributeSet
 import android.view.WindowManager
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
+import com.yalantis.colormatchtabs.colormatchtabs.*
+import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedListener
+import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
 
 /**
  * Created by anna on 10.05.17.
