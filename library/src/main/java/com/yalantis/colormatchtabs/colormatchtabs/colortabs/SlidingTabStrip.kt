@@ -1,7 +1,6 @@
 package com.yalantis.colormatchtabs.colormatchtabs.colortabs
 
 import android.animation.Animator
-import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -11,11 +10,9 @@ import android.graphics.RectF
 import android.support.v4.view.animation.PathInterpolatorCompat
 import android.util.AttributeSet
 import android.view.Gravity
-import android.view.animation.AnimationSet
 import android.widget.LinearLayout
+import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
-import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
-import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorTabView
 import com.yalantis.colormatchtabs.colormatchtabs.getDimen
 import com.yalantis.colormatchtabs.colormatchtabs.getDimenToFloat
 
@@ -37,6 +34,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
     private var backgroundCanvas: Canvas? = null
     internal var isAnimate: Boolean = false
     private var animateLeftX = 0f
+    private var animateY = 0f
     internal val menuToggleListener: MenuToggleListener = this
     private var isMenuToggle: Boolean = false
 
@@ -66,7 +64,12 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         if (isMenuToggle) {
-
+//            (0..childCount - 1).forEach {
+//                val child = getChildAt(it) as ColorTabView
+//                if(child.tab?.isSelected ?: false) {
+//                    drawRectangle(child, canvas, false)
+//                }
+//            }
         } else {
             (0..childCount - 1).forEach {
                 val child = getChildAt(it) as ColorTabView
@@ -76,7 +79,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
                 }
                 if (child.tab?.isSelected ?: false && isAnimate) {
                     animateRectangle(child, canvas)
-                } else if (child.tab?.isSelected ?: false && !isAnimate) {
+                } else if (child.tab?.isSelected ?: false && !isAnimate && !isMenuToggle) {
                     drawBackgroundTab(child, canvas)
                 }
             }
@@ -127,14 +130,14 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
      */
 
     private fun animateRectangle(child: ColorTabView, canvas: Canvas?) {
-       drawRectangle(child, canvas, true)
+        drawRectangle(child, canvas, true)
     }
 
     private fun drawRectangle(child: ColorTabView, canvas: Canvas?, isAnimateRectangle: Boolean) {
         var left = 0f
         var right = 0f
 
-        if(!isAnimateRectangle) {
+        if (!isAnimateRectangle) {
             left = if (child.tab?.position == FIRST_TAB_POSITION) child.x.minus(getDimen(R.dimen.radius)) else child.x
             right = if (child.tab?.position == (parent as ColorMatchTabLayout).count()?.minus(1)) child.x.plus(child.width).plus(getDimen(R.dimen.radius)) else child.x.plus(child.width)
         } else {
@@ -142,7 +145,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
             left = if (child.tab?.position == FIRST_TAB_POSITION) leftX.minus(getDimen(R.dimen.radius)) else leftX
             right = if (child.tab?.position == (parent as ColorMatchTabLayout).count()?.minus(1)) leftX.plus(child.width).plus(getDimen(R.dimen.radius)) else leftX.plus(child.width)
         }
-        val rectangle = RectF(left, 0f, right, child.height.toFloat())
+        val rectangle = RectF(left, if (isMenuToggle) animateY else 0f, right, child.height.toFloat())
         canvas?.drawRoundRect(rectangle, getDimenToFloat(R.dimen.radius), getDimenToFloat(R.dimen.radius), backgroundPaint)
     }
 
@@ -152,6 +155,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
 
     override fun onOpenMenu() {
         animateIconTabs(0f, (height * 2).toFloat())
+        //moveUpRect()
     }
 
     /**
@@ -195,6 +199,17 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
                     isMenuToggle = true
                 }
             })
+        }.start()
+    }
+
+    private fun moveUpRect() {
+        ValueAnimator.ofFloat(0f, (height * 2).toFloat()).apply {
+            duration = ANIMATION_DURATON
+            interpolator = PathInterpolatorCompat.create(CONTROL_X1, CONTROL_Y1, CONTROL_X2, CONTROL_Y2)
+            addUpdateListener {
+                animateY = animatedValue as Float
+                invalidate()
+            }
         }.start()
     }
 

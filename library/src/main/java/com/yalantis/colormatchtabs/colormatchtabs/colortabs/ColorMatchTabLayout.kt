@@ -6,6 +6,12 @@ import android.util.AttributeSet
 import android.view.WindowManager
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
+import com.yalantis.colormatchtabs.colormatchtabs.R
+import com.yalantis.colormatchtabs.colormatchtabs.getColor
+import com.yalantis.colormatchtabs.colormatchtabs.getDimen
+import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedListener
+import com.yalantis.colormatchtabs.colormatchtabs.menu.ArcMenu
+import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
 
 /**
  * Created by anna on 10.05.17.

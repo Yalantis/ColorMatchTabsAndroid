@@ -19,6 +19,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
+import com.yalantis.colormatchtabs.colormatchtabs.getColor
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
 import com.yalantis.colormatchtabs.colormatchtabs.getDimen
 
