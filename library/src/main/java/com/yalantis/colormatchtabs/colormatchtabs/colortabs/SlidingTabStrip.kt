@@ -46,7 +46,7 @@ class SlidingTabStrip : LinearLayout {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        (0..childCount - 1).map {
+        (0..childCount - 1).forEach {
             val child = getChildAt(it) as ColorTabView
             backgroundCanvas = canvas
             if (child.tab?.isSelected ?: false) {
