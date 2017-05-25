@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
+import android.widget.Toast
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.adapter.ColorTabAdapter
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.ColorTabLayoutOnPageChangeListener
+import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnArcMenuListener
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -42,6 +45,20 @@ class MainActivity : AppCompatActivity() {
             override fun onSelectedTab(tab: ColorTab?) {
                 pager.currentItem = tab?.position ?: 0
                 toolbar.toolbarTitle.setTextColor(tab?.selectedColor ?: ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
+            }
+        })
+        arcMenu.addMenuToggleListener(object : MenuToggleListener {
+            override fun onOpenMenu() {
+
+            }
+
+            override fun onCloseMenu() {
+
+            }
+        })
+        arcMenu.addOnClickListener(object : OnArcMenuListener {
+            override fun onClick(position: Int) {
+                Toast.makeText(this@MainActivity, "Tab " + position.toString() + " is clicked", Toast.LENGTH_LONG).show()
             }
         })
     }

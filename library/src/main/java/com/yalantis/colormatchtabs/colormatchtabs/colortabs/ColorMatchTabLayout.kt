@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.WindowManager
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
+import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedListener
 import com.yalantis.colormatchtabs.colormatchtabs.menu.ArcMenu
@@ -16,11 +17,10 @@ import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimen
 /**
  * Created by anna on 10.05.17.
  */
-class ColorMatchTabLayout : HorizontalScrollView {
+class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     companion object {
         private const val INVALID_WIDTH = -1
-
     }
 
     internal lateinit var tabStrip: SlidingTabStrip
@@ -177,7 +177,14 @@ class ColorMatchTabLayout : HorizontalScrollView {
     fun addArcMenu(arcMenu: ArcMenu) {
         this.arcMenu = arcMenu
         this.arcMenu?.tabs = tabs
-        this.arcMenu?.menuToggleListener = tabStrip.menuToggleListener
+        this.arcMenu?.menuToggleListener = this
     }
 
+    override fun onOpenMenu() {
+        tabStrip.onOpenMenu()
+    }
+
+    override fun onCloseMenu() {
+        tabStrip.onCloseMenu()
+    }
 }
