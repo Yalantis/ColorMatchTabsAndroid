@@ -173,10 +173,9 @@ class ColorMatchTabLayout : HorizontalScrollView {
 
     internal fun getSelectedTabView() = tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
 
-    fun addArcMenu(arcMenu: ArcMenu) {
-        this.arcMenu = arcMenu
-        this.arcMenu?.tabs = tabs
-        this.arcMenu?.menuToggleListener = tabStrip.menuToggleListener
+    fun addArcMenu(arcMenu: ArcMenu) = this.arcMenu.apply {
+        arcMenu.tabs = tabs
+        arcMenu.menuToggleListener = tabStrip.menuToggleListener
     }
 
 }
