@@ -1,7 +1,9 @@
-package com.yalantis.colormatchtabs.colormatchtabs
+package com.yalantis.colormatchtabs.colormatchtabs.model
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.support.annotation.ColorInt
+import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorTabView
 
 
 /**
@@ -23,7 +25,8 @@ class ColorTab {
             tabView?.updateView()
         }
 
-    var selectedColor: Int = Color.RED
+
+     var selectedColor: Int = Color.RED
         set(value) {
             field = value
             tabView?.updateView()

@@ -1,9 +1,12 @@
-package com.yalantis.colormatchtabs.colormatchtabs
+package com.yalantis.colormatchtabs.colormatchtabs.colortabs
 
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.os.Build
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
 import android.util.AttributeSet
 import android.util.Log
@@ -14,17 +17,15 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.yalantis.colormatchtabs.colormatchtabs.R
+import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
+import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
+import com.yalantis.colormatchtabs.colormatchtabs.getDimen
 
 /**
  * Created by anna on 10.05.17.
  */
 class ColorTabView : LinearLayout, View.OnClickListener {
-
-    companion object {
-        private const val NORMAL_VIEWS_MARGIN = 16
-        private const val RADIUS = 22
-        private const val TAB_MAX_WIDTH = 132
-    }
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -39,7 +40,8 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         }
 
     internal var parentLayout: ColorMatchTabLayout? = null
-
+    private lateinit var textView: TextView
+    internal lateinit var iconView: ImageView
 
     fun initColorTabView() {
         gravity = Gravity.CENTER
@@ -58,8 +60,6 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         addView(textView)
     }
 
-    private lateinit var textView: TextView
-    private lateinit var iconView: ImageView
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onInitializeAccessibilityEvent(event: AccessibilityEvent) {
@@ -81,11 +81,11 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         val maxWidth = parentLayout?.tabMaxWidth
 
         val widthMeasureSpec: Int
-        val heightMeasureSpec = origHeightMeasureSpec  - dpToPx(4)
+        val heightMeasureSpec = origHeightMeasureSpec  - getDimen(R.dimen.tab_padding)
         if (maxWidth ?: 0 > 0 && (specWidthMode == MeasureSpec.UNSPECIFIED || specWidthSize > maxWidth ?: 0)) {
             // If we have a max width and a given spec which is either unspecified or
             // larger than the max width, update the width spec using the same mode
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) dpToPx(TAB_MAX_WIDTH) else maxWidth ?: 0, MeasureSpec.EXACTLY)
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) getDimen(R.dimen.tab_max_width) else maxWidth ?: 0, MeasureSpec.EXACTLY)
         } else {
             // Else, use the original width spec
             widthMeasureSpec = origWidthMeasureSpec
@@ -95,11 +95,10 @@ class ColorTabView : LinearLayout, View.OnClickListener {
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         super.onLayout(changed, l, t, r, b)
-        iconView.setPadding(dpToPx(NORMAL_VIEWS_MARGIN), 0, dpToPx(NORMAL_VIEWS_MARGIN), 0)
-        textView.setPadding(0, 0, dpToPx(NORMAL_VIEWS_MARGIN), 0)
+        iconView.setPadding(getDimen(R.dimen.normal_margin), 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
+        textView.setPadding(0, 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
         if(clickedTabView != null) {
             parentLayout?.tabStrip?.animateDrawTab(clickedTabView)
-            Log.e("OnLayout", "work")
         }
     }
 
@@ -108,13 +107,14 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         if (tab?.isSelected ?: false) {
             textView.visibility = View.VISIBLE
             textView.text = colorTab?.text
-            textView.setTextColor(Color.BLACK)
+            textView.setTextColor(Color.WHITE)
             textView.requestLayout()
         } else {
             textView.visibility = View.GONE
         }
         if (colorTab?.icon != null) {
             iconView.setImageDrawable(colorTab.icon)
+            reColorDrawable(colorTab.isSelected)
             iconView.requestLayout()
         }
 
@@ -124,18 +124,20 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     internal var clickedTabView: ColorTabView? = null
 
     override fun onClick(v: View?) {
-        Log.e("OnClick", "start")
-        Log.e("OnClick", parentLayout?.tabStrip?.isAnimate.toString())
         if(!(parentLayout?.tabStrip?.isAnimate ?: false)) {
-            Log.e("OnClick", "work")
             val clickedTabView = v as ColorTabView?
             parentLayout?.select(clickedTabView?.tab)
             this.clickedTabView = clickedTabView
         }
     }
 
-    private fun dpToPx(dps: Int): Int {
-        return Math.round(resources.displayMetrics.density * dps)
+    internal fun reColorDrawable(isSelected: Boolean) {
+        if (isSelected) {
+            iconView.colorFilter = null
+            iconView.setColorFilter(Color.parseColor("#ffffff"), PorterDuff.Mode.SRC_ATOP)
+        } else {
+            iconView.setColorFilter(tab?.selectedColor ?: 0, PorterDuff.Mode.SRC_ATOP)
+        }
     }
 
 }

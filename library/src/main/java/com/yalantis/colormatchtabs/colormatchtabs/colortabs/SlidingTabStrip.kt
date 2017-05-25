@@ -1,4 +1,4 @@
-package com.yalantis.colormatchtabs.colormatchtabs
+package com.yalantis.colormatchtabs.colormatchtabs.colortabs
 
 import android.animation.Animator
 import android.animation.ValueAnimator
@@ -11,6 +11,11 @@ import android.support.v4.view.animation.PathInterpolatorCompat
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.LinearLayout
+import com.yalantis.colormatchtabs.colormatchtabs.R
+import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
+import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorTabView
+import com.yalantis.colormatchtabs.colormatchtabs.getDimen
+import com.yalantis.colormatchtabs.colormatchtabs.getDimenToFloat
 
 /**
  * Created by anna on 11.05.17.
@@ -65,7 +70,7 @@ class SlidingTabStrip : LinearLayout {
         val left = if (child.tab?.position == 0) child.x.minus(getDimen(R.dimen.radius)) else child.x
         val right = if (child.tab?.position == parentLayout?.count()?.minus(1)) child.x.plus(child.width).plus(getDimen(R.dimen.radius)) else child.x.plus(child.width)
         val rectangle = RectF(left, 0f, right, child.height.toFloat())
-        canvas?.drawRoundRect(rectangle, getDimen(R.dimen.radius), getDimen(R.dimen.radius), backgroundPaint)
+        canvas?.drawRoundRect(rectangle, getDimenToFloat(R.dimen.radius), getDimenToFloat(R.dimen.radius), backgroundPaint)
     }
 
     internal fun animateDrawTab(child: ColorTabView?) {
@@ -100,7 +105,7 @@ class SlidingTabStrip : LinearLayout {
         val left = if (child.tab?.position == 0) leftX.minus(getDimen(R.dimen.radius)) else leftX
         val right = if (child.tab?.position == parentLayout?.count()?.minus(1)) leftX.plus(child.width).plus(getDimen(R.dimen.radius)) else leftX.plus(child.width)
         val rectangle = RectF(left, 0f, right, child.height.toFloat())
-        canvas?.drawRoundRect(rectangle, getDimen(R.dimen.radius), getDimen(R.dimen.radius), backgroundPaint)
+        canvas?.drawRoundRect(rectangle, getDimenToFloat(R.dimen.radius), getDimenToFloat(R.dimen.radius), backgroundPaint)
     }
 
 }

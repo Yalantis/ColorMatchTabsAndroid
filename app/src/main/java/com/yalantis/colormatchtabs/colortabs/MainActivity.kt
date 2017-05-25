@@ -2,11 +2,13 @@ package com.yalantis.colormatchtabs.colortabs
 
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.yalantis.colormatchtabs.colormatchtabs.ColorTab
-import com.yalantis.colormatchtabs.colormatchtabs.ColorTabLayoutOnPageChangeListener
-import com.yalantis.colormatchtabs.colormatchtabs.OnColorTabSelectedListener
+import com.yalantis.colormatchtabs.colormatchtabs.adapter.ColorTabAdapter
+import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
+import com.yalantis.colormatchtabs.colormatchtabs.listeners.ColorTabLayoutOnPageChangeListener
+import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedListener
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,40 +18,16 @@ class MainActivity : AppCompatActivity() {
         Fresco.initialize(this)
         setContentView(R.layout.activity_main)
 
-        val firstTab = tabLayout.newTab()
-        firstTab.text = getString(R.string.products)
-        firstTab.selectedColor = Color.GREEN
-        firstTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
+        val colorsArray = resources.getStringArray(R.array.colors)
+        val iconsArray = resources.obtainTypedArray(R.array.icons)
+        val textsArray = resources.getStringArray(R.array.texts)
 
-        val secondTab = tabLayout.newTab()
-        secondTab.text = getString(R.string.venues)
-        secondTab.selectedColor = Color.GREEN
-        secondTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
-
-        val thirdTab = tabLayout.newTab()
-        thirdTab.text = getString(R.string.reviews)
-        thirdTab.selectedColor = Color.GREEN
-        thirdTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
-
-        val fourthTab = tabLayout.newTab()
-        fourthTab.text = getString(R.string.friends)
-        fourthTab.selectedColor = Color.GREEN
-        fourthTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
-
-        val fiveTab = tabLayout.newTab()
-        fiveTab.text = getString(R.string.friends)
-        fiveTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
-
-        val sixTab = tabLayout.newTab()
-        sixTab.text = getString(R.string.friends)
-        sixTab.icon = resources.getDrawable(R.drawable.ic_accessibility_black_24dp)
-
-        tabLayout.addTab(firstTab)
-        tabLayout.addTab(secondTab)
-        tabLayout.addTab(thirdTab)
-        tabLayout.addTab(fourthTab)
-        tabLayout.addTab(fiveTab)
-        tabLayout.addTab(sixTab)
+        colorsArray.forEachIndexed { index, color ->
+            val s = textsArray[index]
+            val color1 = Color.parseColor(color)
+            val drawable = iconsArray.getDrawable(index)
+            tabLayout.addTab(ColorTabAdapter.createColorTab(tabLayout, s, color1, drawable))
+        }
 
         pager.adapter = ColorTabsAdapter(supportFragmentManager, tabLayout.count())
         pager.addOnPageChangeListener(ColorTabLayoutOnPageChangeListener(tabLayout))
@@ -59,4 +37,5 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
 }
