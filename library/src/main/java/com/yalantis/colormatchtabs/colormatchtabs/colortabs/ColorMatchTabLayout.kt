@@ -178,11 +178,8 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         arcMenu.menuToggleListener = tabStrip.menuToggleListener
     }
 
-    override fun onOpenMenu() {
-        tabStrip.onOpenMenu()
-    }
+    override fun onOpenMenu() = tabStrip.onOpenMenu()
 
-    override fun onCloseMenu() {
-        tabStrip.onCloseMenu()
-    }
+    override fun onCloseMenu() = tabStrip.onCloseMenu()
+
 }
