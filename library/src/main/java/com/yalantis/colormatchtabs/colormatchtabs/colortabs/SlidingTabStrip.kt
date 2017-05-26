@@ -13,8 +13,9 @@ import android.view.Gravity
 import android.widget.LinearLayout
 import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
-import com.yalantis.colormatchtabs.colormatchtabs.getDimen
-import com.yalantis.colormatchtabs.colormatchtabs.getDimenToFloat
+import com.yalantis.colormatchtabs.colormatchtabs.utils.InvalidNumberOfTabs
+import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimen
+import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimenToFloat
 
 /**
  * Created by anna on 11.05.17.
@@ -28,6 +29,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
         private const val CONTROL_X2 = 0.360f
         private const val CONTROL_Y2 = 1.200f
         private const val FIRST_TAB_POSITION = 0
+        private const val INVALID_TABS_AMOUNT = 5
     }
 
     private lateinit var backgroundPaint: Paint
@@ -35,8 +37,8 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
     internal var isAnimate: Boolean = false
     private var animateLeftX = 0f
     private var animateY = 0f
-    internal val menuToggleListener: MenuToggleListener = this
     private var isMenuToggle: Boolean = false
+    internal val menuToggleListener: MenuToggleListener = this
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -63,14 +65,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        if (isMenuToggle) {
-//            (0..childCount - 1).forEach {
-//                val child = getChildAt(it) as ColorTabView
-//                if(child.tab?.isSelected ?: false) {
-//                    drawRectangle(child, canvas, false)
-//                }
-//            }
-        } else {
+        if (!isMenuToggle) {
             (0..childCount - 1).forEach {
                 val child = getChildAt(it) as ColorTabView
                 backgroundCanvas = canvas
@@ -154,8 +149,11 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
      */
 
     override fun onOpenMenu() {
-        animateIconTabs(0f, (height * 2).toFloat())
-        //moveUpRect()
+        if ((parent as ColorMatchTabLayout).tabs.count() <= INVALID_TABS_AMOUNT && (parent as ColorMatchTabLayout).tabs.count() > 2) {
+            animateIconTabs(0f, (height * 2).toFloat())
+        } else {
+            throw InvalidNumberOfTabs()
+        }
     }
 
     /**
@@ -199,17 +197,6 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
                     isMenuToggle = true
                 }
             })
-        }.start()
-    }
-
-    private fun moveUpRect() {
-        ValueAnimator.ofFloat(0f, (height * 2).toFloat()).apply {
-            duration = ANIMATION_DURATON
-            interpolator = PathInterpolatorCompat.create(CONTROL_X1, CONTROL_Y1, CONTROL_X2, CONTROL_Y2)
-            addUpdateListener {
-                animateY = animatedValue as Float
-                invalidate()
-            }
         }.start()
     }
 

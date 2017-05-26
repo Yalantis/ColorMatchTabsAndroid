@@ -19,9 +19,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
-import com.yalantis.colormatchtabs.colormatchtabs.getColor
+import com.yalantis.colormatchtabs.colormatchtabs.utils.getColor
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
-import com.yalantis.colormatchtabs.colormatchtabs.getDimen
+import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimen
 
 /**
  * Created by anna on 10.05.17.
@@ -124,8 +124,10 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     override fun onClick(v: View?) {
         if(!(parent as SlidingTabStrip).isAnimate) {
             val clickedTabView = v as ColorTabView?
-            (parent.parent as ColorMatchTabLayout).select(clickedTabView?.tab)
-            this.clickedTabView = clickedTabView
+            if((parent.parent as ColorMatchTabLayout).selectedTab != clickedTabView?.tab) {
+                (parent.parent as ColorMatchTabLayout).select(clickedTabView?.tab)
+                this.clickedTabView = clickedTabView
+            }
         }
     }
 
