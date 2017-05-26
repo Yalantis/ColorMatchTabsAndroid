@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         pager.adapter = ColorTabsAdapter(supportFragmentManager, tabLayout.count())
         pager.addOnPageChangeListener(ColorTabLayoutOnPageChangeListener(tabLayout))
+        tabLayout.addArcMenu(arcMenu)
         tabLayout.addOnColorTabSelectedListener(object : OnColorTabSelectedListener {
             override fun onSelectedTab(tab: ColorTab?) {
                 pager.currentItem = tab?.position ?: 0

@@ -6,8 +6,11 @@ import android.util.AttributeSet
 import android.view.WindowManager
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
-import com.yalantis.colormatchtabs.colormatchtabs.*
+import com.yalantis.colormatchtabs.colormatchtabs.R
+import com.yalantis.colormatchtabs.colormatchtabs.getColor
+import com.yalantis.colormatchtabs.colormatchtabs.getDimen
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedListener
+import com.yalantis.colormatchtabs.colormatchtabs.menu.ArcMenu
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
 
 /**
@@ -20,9 +23,14 @@ class ColorMatchTabLayout : HorizontalScrollView {
     }
 
     internal lateinit var tabStrip: SlidingTabStrip
-    private var tabs: MutableList<ColorTab> = mutableListOf()
+    internal var tabs: MutableList<ColorTab> = mutableListOf()
     private var tabSelectedListener: OnColorTabSelectedListener? = null
     internal var selectedTab: ColorTab? = null
+    internal var backgroundColor: Int = getColor(R.color.mainBackgroundColor)
+        set(value) {
+            field = value
+            setBackgroundColor(value)
+        }
     internal var tabMaxWidth = Integer.MAX_VALUE
     internal var previousSelectedTab: ColorTabView? = null
 
@@ -35,7 +43,6 @@ class ColorMatchTabLayout : HorizontalScrollView {
     private fun initLayout(attrs: AttributeSet?, defStyleAttr: Int) {
         isHorizontalScrollBarEnabled = false
         tabStrip = SlidingTabStrip(context)
-        tabStrip.parentLayout = this
         super.addView(tabStrip, 0, LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorMatchTabLayout)
@@ -90,10 +97,8 @@ class ColorMatchTabLayout : HorizontalScrollView {
         tabView = createTabView(this)
     }
 
-
     fun createTabView(tab: ColorTab) = ColorTabView(context).apply {
         this.tab = tab
-        this.parentLayout = this@ColorMatchTabLayout
     }
 
     private fun configureTab(tab: ColorTab, position: Int) {
@@ -114,8 +119,7 @@ class ColorMatchTabLayout : HorizontalScrollView {
     }
 
     private fun updateTabViewLayoutParams(lp: LinearLayout.LayoutParams) {
-            lp.width = LinearLayout.LayoutParams.WRAP_CONTENT
-            lp.weight = 0f
+        lp.width = LinearLayout.LayoutParams.WRAP_CONTENT
     }
 
     fun count() = tabs.size
@@ -124,13 +128,13 @@ class ColorMatchTabLayout : HorizontalScrollView {
         if (index < 0 || index >= count()) {
             return null
         } else {
-            return tabs.get(index)
+            return tabs[index]
         }
     }
 
     internal fun setScrollPosition(position: Int, positionOffset: Float, updateSelectedText: Boolean) {
         val roundedPosition = Math.round(position + positionOffset)
-        if (roundedPosition < 0 || roundedPosition >= tabStrip.getChildCount()) {
+        if (roundedPosition < 0 || roundedPosition >= tabStrip.childCount) {
             return
         }
 
@@ -166,6 +170,11 @@ class ColorMatchTabLayout : HorizontalScrollView {
         tabSelectedListener?.onSelectedTab(colorTab)
     }
 
-    private fun getSelectedTabView() = tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
+    internal fun getSelectedTabView() = tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
+
+    fun addArcMenu(arcMenu: ArcMenu) = arcMenu.apply {
+        arcMenu.listOfTabs = tabs
+        arcMenu.menuToggleListener = tabStrip.menuToggleListener
+    }
 
 }
