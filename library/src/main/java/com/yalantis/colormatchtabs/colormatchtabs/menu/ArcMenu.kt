@@ -16,6 +16,7 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
+import android.widget.ImageView
 import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnArcMenuListener
@@ -66,7 +67,7 @@ class ArcMenu : FrameLayout {
 
     private fun initFab() {
         fab = FloatingActionButton(context)
-        fabLayoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        fabLayoutParams = LayoutParams(getDimen(R.dimen.fab_size), getDimen(R.dimen.fab_size))
         fabLayoutParams.gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
         fab.layoutParams = fabLayoutParams
         fab.useCompatPadding = true
@@ -90,13 +91,6 @@ class ArcMenu : FrameLayout {
                 Math.min(heightLayout, MeasureSpec.getSize(heightMeasureSpec)),
                 MeasureSpec.EXACTLY)
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-
-    }
-
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
-        fabLayoutParams.bottomMargin = getDimen(R.dimen.margin_small)
-        fab.layoutParams = fabLayoutParams
     }
 
     private fun drawMenu() {

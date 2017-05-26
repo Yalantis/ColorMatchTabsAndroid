@@ -8,4 +8,5 @@
     <dimen name="tab_padding">4dp</dimen>
     <dimen name="padding_normal">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
 </resources>

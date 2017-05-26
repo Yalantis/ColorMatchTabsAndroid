@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
@@ -49,11 +50,11 @@ class MainActivity : AppCompatActivity() {
         })
         arcMenu.addMenuToggleListener(object : MenuToggleListener {
             override fun onOpenMenu() {
-                viewUnderMenu.animateBackground()
+                viewUnderMenu.animateBackground(true)
             }
 
             override fun onCloseMenu() {
-
+                viewUnderMenu.animateBackground(false)
             }
         })
         arcMenu.addOnClickListener(object : OnArcMenuListener {
