@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         })
         arcMenu.addMenuToggleListener(object : MenuToggleListener {
             override fun onOpenMenu() {
-
+                viewUnderMenu.animateBackground()
             }
 
             override fun onCloseMenu() {
