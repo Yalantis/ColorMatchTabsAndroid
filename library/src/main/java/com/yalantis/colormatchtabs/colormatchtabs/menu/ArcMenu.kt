@@ -173,9 +173,9 @@ class ArcMenu : FrameLayout {
     private fun calculateRadius() = width / 3
 
     private fun calculateSubMenu() {
-        val eachAngle = MAX_ANGLE_FOR_MENU / (tabs.count() - 1).toDouble()
+        val eachAngle = MAX_ANGLE_FOR_MENU / (listOfTabs.count() - 1).toDouble()
         var angleForChild = START_MENU_ANGLE
-        tabs.forEach {
+        listOfTabs.forEach {
             val childX = ((fab.x + (fab.width / 2).toFloat()) - (calculateRadius() * Math.cos(Math.toRadians(angleForChild))).toFloat())
             val childY = ((fab.y + (fab.height / 2).toFloat()) + (calculateRadius() * Math.sin(Math.toRadians(angleForChild))).toFloat())
             circleSubMenu.add(CircleSubMenu(childX, childY, calculateCircleSize()))
