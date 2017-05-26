@@ -34,7 +34,6 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         }
     internal var tabMaxWidth = Integer.MAX_VALUE
     internal var previousSelectedTab: ColorTabView? = null
-    internal var arcMenu: ArcMenu? = null
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -174,10 +173,9 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     internal fun getSelectedTabView() = tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
 
-    fun addArcMenu(arcMenu: ArcMenu) {
-        this.arcMenu = arcMenu
-        this.arcMenu?.tabs = tabs
-        this.arcMenu?.menuToggleListener = this
+    fun addArcMenu(arcMenu: ArcMenu) = arcMenu.apply {
+        arcMenu.listOfTabs = tabs
+        arcMenu.menuToggleListener = tabStrip.menuToggleListener
     }
 
     override fun onOpenMenu() {

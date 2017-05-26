@@ -144,7 +144,7 @@ class SlidingTabStrip : LinearLayout {
     }
 
     /**
-     * Animate the icon tabs moving down when the ArcMenu is open
+     * Animate the icon listOfTabs moving down when the ArcMenu is open
      */
 
     internal fun onOpenMenu() {
@@ -156,7 +156,7 @@ class SlidingTabStrip : LinearLayout {
     }
 
     /**
-     * Animate the icon tabs moving up when the ArcMenu is closed
+     * Animate the icon listOfTabs moving up when the ArcMenu is closed
      */
 
     internal fun onCloseMenu() {
