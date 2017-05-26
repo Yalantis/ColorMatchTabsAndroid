@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import com.yalantis.colormatchtabs.colortabs.R
@@ -13,14 +14,15 @@ import com.yalantis.colormatchtabs.colortabs.R
  */
 class MenuView : LinearLayout {
 
-    private var radius = 0f
+    private var radius = 300f
     private val backgroundPaint: Paint = Paint()
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        setWillNotDraw(false)
         backgroundPaint.flags = Paint.ANTI_ALIAS_FLAG
-        backgroundPaint.color = R.color.colorWhite
+        backgroundPaint.color = ContextCompat.getColor(context, R.color.colorWhite)
     }
 
     fun animateBackground() {
@@ -35,6 +37,6 @@ class MenuView : LinearLayout {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.drawCircle(0f, 0f, radius, backgroundPaint)
+        canvas?.drawCircle(80f, 80f, radius, backgroundPaint)
     }
 }
