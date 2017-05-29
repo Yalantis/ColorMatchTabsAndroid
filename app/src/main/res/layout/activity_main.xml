@@ -35,7 +35,7 @@
     </android.support.v7.widget.Toolbar>
 
     <com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/colorMatchTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
@@ -45,10 +45,10 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/tabLayout" />
+        android:layout_below="@id/colorMatchTabLayout" />
 
     </RelativeLayout>
 

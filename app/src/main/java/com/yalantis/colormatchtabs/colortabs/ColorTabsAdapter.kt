@@ -15,4 +15,5 @@ class ColorTabsAdapter(fragmentManager: FragmentManager, amountTabs: Int) : Frag
     override fun getItem(position: Int): Fragment = ListItemsFragment.newInstance()
 
     override fun getCount(): Int = amountTabs
+
 }

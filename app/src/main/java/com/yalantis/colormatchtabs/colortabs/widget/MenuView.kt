@@ -11,6 +11,7 @@ import android.support.v4.view.animation.PathInterpolatorCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
+import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimen
 import com.yalantis.colormatchtabs.colortabs.R
 
 /**
@@ -38,8 +39,8 @@ class MenuView : LinearLayout {
 
     fun animateBackground(isMenuOpen: Boolean) {
         visibility = View.VISIBLE
-        val start = if (isMenuOpen) 0f else height.toFloat()
-        val end = if (isMenuOpen) height.toFloat() else 0f
+        val start = if (isMenuOpen) 0f else (height.toFloat() + getDimen(R.dimen.normal_margin))
+        val end = if (isMenuOpen) (height.toFloat() + getDimen(R.dimen.normal_margin)) else 0f
         ValueAnimator.ofFloat(start, end).apply {
             duration = 200
             interpolator = PathInterpolatorCompat.create(CONTROL_X1, CONTROL_Y1, CONTROL_X2, CONTROL_Y2)

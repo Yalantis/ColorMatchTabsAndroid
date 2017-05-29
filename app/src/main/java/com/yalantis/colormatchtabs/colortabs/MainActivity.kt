@@ -33,18 +33,20 @@ class MainActivity : AppCompatActivity() {
         val textsArray = resources.getStringArray(R.array.texts)
 
         colorsArray.forEachIndexed { index, color ->
-            val s = textsArray[index]
-            val color1 = Color.parseColor(color)
-            val drawable = iconsArray.getDrawable(index)
-            tabLayout.addTab(ColorTabAdapter.createColorTab(tabLayout, s, color1, drawable))
+            val tabName = textsArray[index]
+            val selectedColor = Color.parseColor(color)
+            val icon = iconsArray.getDrawable(index)
+            colorMatchTabLayout.addTab(ColorTabAdapter.createColorTab(colorMatchTabLayout, tabName, selectedColor, icon))
         }
 
-        pager.adapter = ColorTabsAdapter(supportFragmentManager, tabLayout.count())
-        pager.addOnPageChangeListener(ColorTabLayoutOnPageChangeListener(tabLayout))
-        tabLayout.addArcMenu(arcMenu)
-        tabLayout.addOnColorTabSelectedListener(object : OnColorTabSelectedListener {
+        viewPager.adapter = ColorTabsAdapter(supportFragmentManager, colorMatchTabLayout.count())
+        viewPager.addOnPageChangeListener(ColorTabLayoutOnPageChangeListener(colorMatchTabLayout))
+        viewPager.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGreen))
+        colorMatchTabLayout.addArcMenu(arcMenu)
+        colorMatchTabLayout.addOnColorTabSelectedListener(object : OnColorTabSelectedListener {
             override fun onSelectedTab(tab: ColorTab?) {
-                pager.currentItem = tab?.position ?: 0
+                viewPager.currentItem = tab?.position ?: 0
+                viewPager.setBackgroundColor(tab?.selectedColor ?: ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
                 toolbar.toolbarTitle.setTextColor(tab?.selectedColor ?: ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
             }
         })

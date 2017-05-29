@@ -57,8 +57,8 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         typedArray.recycle()
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        var heightMeasureSpec = heightMeasureSpec
+    override fun onMeasure(widthMeasureSpec: Int, originHeightMeasureSpec: Int) {
+        var heightMeasureSpec = originHeightMeasureSpec
         // If we have a MeasureSpec which allows us to decide our height, try and use the default
         // height
         val idealHeight = (getDimen(R.dimen.default_height) + paddingTop + paddingBottom)

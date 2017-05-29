@@ -7,4 +7,7 @@
     <color name="colorGreen">#79BC32</color>
     <color name="colorGrey">#949693</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorDishText">#696564</color>
+    <color name="colorCafeName">#8a93d2</color>
+    <color name="colorReview">#9b9b9b</color>
 </resources>
