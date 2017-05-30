@@ -38,6 +38,7 @@ class MenuView : LinearLayout {
     }
 
     fun animateBackground(isMenuOpen: Boolean) {
+        visibility = View.VISIBLE
         val start = if (isMenuOpen) 0f else (height.toFloat() * 2)
         val end = if (isMenuOpen) (height.toFloat() * 2) else 0f
         ValueAnimator.ofFloat(start, end).apply {
