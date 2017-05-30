@@ -2,8 +2,10 @@ package com.yalantis.colormatchtabs.colormatchtabs.colortabs
 
 import android.annotation.TargetApi
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.v4.content.ContextCompat
@@ -86,7 +88,8 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         if (maxWidth > 0 && (specWidthMode == MeasureSpec.UNSPECIFIED || specWidthSize > maxWidth)) {
             // If we have a max width and a given spec which is either unspecified or
             // larger than the max width, update the width spec using the same mode
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) getDimen(R.dimen.tab_max_width) else maxWidth, MeasureSpec.EXACTLY)
+            val selectTabMaxWidth = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) getDimen(R.dimen.tab_max_width) else getDimen(R.dimen.tab_max_width_horizontal)
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) selectTabMaxWidth else maxWidth, MeasureSpec.EXACTLY)
         } else {
             // Else, use the original width spec
             widthMeasureSpec = origWidthMeasureSpec
@@ -103,12 +106,18 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         }
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        updateView()
+    }
+
     fun updateView() {
+        //TODO think about optimize call this method!!
         val colorTab = tab
         if (tab?.isSelected ?: false) {
             textView.visibility = View.VISIBLE
             textView.text = colorTab?.text
-            textView.setTextColor(Color.WHITE)
+            textView.setTextColor(getBackgroundColor())
             textView.requestLayout()
         } else {
             textView.visibility = View.GONE
@@ -134,11 +143,21 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     internal fun reColorDrawable(isSelected: Boolean) {
         if (isSelected) {
             iconView.colorFilter = null
-            //TODO get white color from color for ColorMatchTabsLayout
-            iconView.setColorFilter(getColor(R.color.mainBackgroundColor), PorterDuff.Mode.SRC_ATOP)
+            iconView.setColorFilter(getBackgroundColor(), PorterDuff.Mode.SRC_ATOP)
         } else {
             iconView.setColorFilter(tab?.selectedColor ?: 0, PorterDuff.Mode.SRC_ATOP)
         }
+    }
+
+    private fun getBackgroundColor() : Int {
+        var color = getColor(R.color.mainBackgroundColor)
+        if(parent != null) {
+            val background = (parent.parent as ColorMatchTabLayout).background
+            if (background is ColorDrawable) {
+                color = background.color
+            }
+        }
+        return color
     }
 
 }

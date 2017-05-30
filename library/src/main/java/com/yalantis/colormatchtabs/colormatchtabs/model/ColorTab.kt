@@ -32,12 +32,6 @@ class ColorTab {
             tabView?.updateView()
         }
 
-    var tabColor: Int = Color.WHITE
-        set(value) {
-            field = value
-            tabView?.updateView()
-        }
-
     var position: Int = 0
 
     var isSelected: Boolean = false

@@ -1,6 +1,7 @@
 package com.yalantis.colormatchtabs.colormatchtabs.colortabs
 
 import android.content.Context
+import android.content.res.Configuration
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.WindowManager
@@ -27,11 +28,6 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     internal var tabs: MutableList<ColorTab> = mutableListOf()
     private var tabSelectedListener: OnColorTabSelectedListener? = null
     internal var selectedTab: ColorTab? = null
-    internal var backgroundColor: Int = getColor(R.color.mainBackgroundColor)
-        set(value) {
-            field = value
-            setBackgroundColor(value)
-        }
     internal var tabMaxWidth = Integer.MAX_VALUE
     internal var previousSelectedTab: ColorTabView? = null
     internal var arcMenu: ArcMenu? = null
@@ -73,8 +69,10 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
             // If we don't have an unspecified width spec, use the given size to calculate
             // the max tab width
             val systemService = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val probable = (systemService.defaultDisplay.width - getDimen(R.dimen.tab_max_width)) / (tabs.size - 1)
+            val selectTabWidth = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) getDimen(R.dimen.tab_max_width) else getDimen(R.dimen.tab_max_width_horizontal)
+            val probable = (systemService.defaultDisplay.width - selectTabWidth) / (tabs.size - 1)
             tabMaxWidth = if (probable < getDimen(R.dimen.default_width)) getDimen(R.dimen.default_width) else probable
+
         }
 
         // Now super measure itself using the (possibly) modified height spec
@@ -99,7 +97,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         tabView = createTabView(this)
     }
 
-    fun createTabView(tab: ColorTab) = ColorTabView(context).apply {
+    private fun createTabView(tab: ColorTab) = ColorTabView(context).apply {
         this.tab = tab
     }
 
@@ -158,6 +156,10 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
                 child.isSelected = it == position
             }
         }
+    }
+
+    fun setSelectedTab(position: Int) {
+        select(getTabAt(position))
     }
 
     internal fun select(colorTab: ColorTab?) {
