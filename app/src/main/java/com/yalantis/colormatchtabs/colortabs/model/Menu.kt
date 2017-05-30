@@ -1,7 +1,5 @@
 package com.yalantis.colormatchtabs.colortabs.model
 
-import android.net.Uri
-
 /**
  * Created by anna on 29.05.17.
  */

@@ -13,17 +13,19 @@ import kotlinx.android.synthetic.main.item.view.*
 class ListItemAdapter() : RecyclerView.Adapter<ListItemAdapter.MusicHolder>() {
 
     var items: List<Menu> = listOf()
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onBindViewHolder(holder: MusicHolder?, position: Int) {
         val menu = items[position]
-        holder?.layout?.picture?.setImageURI(menu.picture)
-        holder?.layout?.nameOfDish?.text = menu.dishName
-        holder?.layout?.restaurantName?.text = menu.cafeName
-        holder?.layout?.review?.text = menu.reviewAmount
+        holder?.layout?.apply {
+            picture.setImageURI(menu.picture)
+            nameOfDish.text = menu.dishName
+            restaurantName.text = menu.cafeName
+            review.text = menu.reviewAmount
+        }
     }
 
     override fun getItemCount(): Int = items.count()

@@ -24,7 +24,6 @@ class ColorTabLayoutOnPageChangeListener(colorTabLayout: ColorMatchTabLayout) : 
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         val tabLayout = tabLayoutReference.get()
-        Log.e("PIXEL", positionOffsetPixels.toString())
         val updateIndicator = !(scrollState == SCROLL_STATE_SETTLING && previousScrollState == SCROLL_STATE_IDLE)
         tabLayout?.setScrollPosition(position, positionOffset, updateIndicator)
     }

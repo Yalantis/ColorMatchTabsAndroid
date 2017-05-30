@@ -5,15 +5,14 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
-import android.view.View
 import android.widget.Toast
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.adapter.ColorTabAdapter
-import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.ColorTabLayoutOnPageChangeListener
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnArcMenuListener
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedListener
+import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 
@@ -71,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
-
 
 
 }
