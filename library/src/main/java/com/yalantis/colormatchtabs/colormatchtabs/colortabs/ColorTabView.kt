@@ -6,12 +6,9 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
@@ -20,9 +17,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.yalantis.colormatchtabs.colormatchtabs.R
-import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
-import com.yalantis.colormatchtabs.colormatchtabs.utils.getColor
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
+import com.yalantis.colormatchtabs.colormatchtabs.utils.getColor
 import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimen
 
 /**
@@ -84,7 +80,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         val maxWidth = (parent.parent as ColorMatchTabLayout).tabMaxWidth
 
         val widthMeasureSpec: Int
-        val heightMeasureSpec = origHeightMeasureSpec  - getDimen(R.dimen.tab_padding)
+        val heightMeasureSpec = origHeightMeasureSpec - getDimen(R.dimen.tab_padding)
         if (maxWidth > 0 && (specWidthMode == MeasureSpec.UNSPECIFIED || specWidthSize > maxWidth)) {
             // If we have a max width and a given spec which is either unspecified or
             // larger than the max width, update the width spec using the same mode
@@ -101,7 +97,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         super.onLayout(changed, l, t, r, b)
         iconView.setPadding(getDimen(R.dimen.normal_margin), 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
         textView.setPadding(0, 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
-        if(clickedTabView != null) {
+        if (clickedTabView != null) {
             (parent as SlidingTabStrip).animateDrawTab(clickedTabView)
         }
     }
@@ -131,9 +127,9 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        if(!(parent as SlidingTabStrip).isAnimate) {
+        if (!(parent as SlidingTabStrip).isAnimate) {
             val clickedTabView = v as ColorTabView?
-            if((parent.parent as ColorMatchTabLayout).selectedTab != clickedTabView?.tab) {
+            if ((parent.parent as ColorMatchTabLayout).selectedTab != clickedTabView?.tab) {
                 (parent.parent as ColorMatchTabLayout).select(clickedTabView?.tab)
                 this.clickedTabView = clickedTabView
             }
@@ -149,9 +145,9 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         }
     }
 
-    private fun getBackgroundColor() : Int {
+    private fun getBackgroundColor(): Int {
         var color = getColor(R.color.mainBackgroundColor)
-        if(parent != null) {
+        if (parent != null) {
             val background = (parent.parent as ColorMatchTabLayout).background
             if (background is ColorDrawable) {
                 color = background.color

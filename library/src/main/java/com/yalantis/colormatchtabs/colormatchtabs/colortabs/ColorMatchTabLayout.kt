@@ -12,7 +12,6 @@ import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedListener
 import com.yalantis.colormatchtabs.colormatchtabs.menu.ArcMenu
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
-import com.yalantis.colormatchtabs.colormatchtabs.utils.getColor
 import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimen
 
 /**
@@ -40,15 +39,13 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     private fun initLayout(attrs: AttributeSet?, defStyleAttr: Int) {
         isHorizontalScrollBarEnabled = false
         tabStrip = SlidingTabStrip(context)
-        super.addView(tabStrip, 0, LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        super.addView(tabStrip, 0, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorMatchTabLayout)
         initViewTreeObserver(typedArray)
     }
 
-    fun initViewTreeObserver(typedArray: TypedArray) {
-        typedArray.getDimensionPixelSize(R.styleable.TabLayout_tabMinWidth,
-                INVALID_WIDTH)
+    private fun initViewTreeObserver(typedArray: TypedArray) {
+        typedArray.getDimensionPixelSize(R.styleable.TabLayout_tabMinWidth, INVALID_WIDTH)
         typedArray.recycle()
     }
 
@@ -59,8 +56,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         val idealHeight = (getDimen(R.dimen.default_height) + paddingTop + paddingBottom)
         when (MeasureSpec.getMode(heightMeasureSpec)) {
             MeasureSpec.AT_MOST -> heightMeasureSpec = MeasureSpec.makeMeasureSpec(
-                    Math.min(idealHeight, MeasureSpec.getSize(heightMeasureSpec)),
-                    MeasureSpec.EXACTLY)
+                    Math.min(idealHeight, MeasureSpec.getSize(heightMeasureSpec)), MeasureSpec.EXACTLY)
             MeasureSpec.UNSPECIFIED -> heightMeasureSpec = MeasureSpec.makeMeasureSpec(idealHeight, MeasureSpec.EXACTLY)
         }
 
@@ -79,6 +75,11 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     }
 
+    /**
+     * Method add color tab to this layout. The tab will be added at the end of the list.
+     * If this is the first tab to be added it will become the selected tab.
+     * @param tab ColorTab to add
+     */
     fun addTab(tab: ColorTab) {
         tab.isSelected = tabs.isEmpty()
         if (tab.isSelected) {
@@ -92,6 +93,13 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         tabStrip.addView(tab.tabView, tab.position, createLayoutParamsForTabs())
     }
 
+    /**
+     * Create and return new {@link ColorTab}. You need to manually add this using
+     * {@link #addTab(ColorTab)} or a related method. For customize created tab use {@link ColorTabAdapter}
+     *
+     * @return A new ColorTab
+     * @see #addTab(ColorTab)
+     */
     fun newTab() = ColorTab().apply {
         tabView = createTabView(this)
     }
@@ -121,8 +129,16 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         lp.width = LinearLayout.LayoutParams.WRAP_CONTENT
     }
 
+    /**
+     * Returns the number of tabs currently registered in layout.
+     *
+     *  @return ColorTab count
+     */
     fun count() = tabs.size
 
+    /**
+     * Returns the tab at the specified index.
+     */
     fun getTabAt(index: Int): ColorTab? {
         if (index < 0 || index >= count()) {
             return null
