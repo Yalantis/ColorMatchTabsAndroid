@@ -46,8 +46,8 @@ class ArcMenu : FrameLayout {
     private lateinit var fabLayoutParams: LayoutParams
     private lateinit var backgroundPaint: Paint
     private var isMenuOpen = false
+    internal var listOfTabs: MutableList<ColorTab> = mutableListOf()
     private var circleSubMenu: MutableList<CircleSubMenu> = mutableListOf()
-    internal var tabs: MutableList<ColorTab> = mutableListOf()
     private var currentRadius = 0f
     internal var menuToggleListener: MenuToggleListener? = null
     private var userMenuToggleListener: MenuToggleListener? = null
@@ -133,9 +133,9 @@ class ArcMenu : FrameLayout {
     private fun layoutChildrenArc(canvas: Canvas?) {
         val eachAngle = calculateSubMenuAngle()
         var angleForChild = START_MENU_ANGLE
-        tabs.forEach {
-            val childX = ((fab.x + (fab.width / 2).toFloat()) - (currentRadius * Math.cos(Math.toRadians(angleForChild))).toFloat())
-            val childY = ((fab.y + (fab.height / 2).toFloat()) + (currentRadius * Math.sin(Math.toRadians(angleForChild))).toFloat())
+        listOfTabs.forEach {
+            val childX = ((fab.x + (fab.width/2).toFloat()) - (currentRadius * Math.cos(Math.toRadians(angleForChild))).toFloat())
+            val childY = ((fab.y + (fab.height/2).toFloat()) + (currentRadius * Math.sin(Math.toRadians(angleForChild))).toFloat())
             backgroundPaint.color = it.selectedColor
             canvas?.drawCircle(childX, childY, calculateCircleSize(), backgroundPaint)
             if (currentRadius >= (calculateRadius().toFloat() - (calculateRadius().toFloat() / 3)) && isMenuOpen) {
@@ -211,14 +211,14 @@ class ArcMenu : FrameLayout {
         }.start()
     }
 
-    private fun calculateSubMenuAngle() = MAX_ANGLE_FOR_MENU / (tabs.count() - 1).toDouble()
+    private fun calculateSubMenuAngle() = MAX_ANGLE_FOR_MENU / (listOfTabs.count() - 1).toDouble()
 
     private fun calculateRadius() = width / 3
 
     private fun calculateSubMenu() {
-        val eachAngle = MAX_ANGLE_FOR_MENU / (tabs.count() - 1).toDouble()
+        val eachAngle = MAX_ANGLE_FOR_MENU / (listOfTabs.count() - 1).toDouble()
         var angleForChild = START_MENU_ANGLE
-        tabs.forEach {
+        listOfTabs.forEach {
             val childX = ((fab.x + (fab.width / 2).toFloat()) - (calculateRadius() * Math.cos(Math.toRadians(angleForChild))).toFloat())
             val childY = ((fab.y + (fab.height / 2).toFloat()) + (calculateRadius() * Math.sin(Math.toRadians(angleForChild))).toFloat())
             circleSubMenu.add(CircleSubMenu(childX, childY, calculateCircleSize()))

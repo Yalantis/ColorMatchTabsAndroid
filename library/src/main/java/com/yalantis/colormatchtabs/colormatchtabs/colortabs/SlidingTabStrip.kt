@@ -20,7 +20,7 @@ import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimenToFloat
 /**
  * Created by anna on 11.05.17.
  */
-class SlidingTabStrip : LinearLayout {
+class SlidingTabStrip : LinearLayout, MenuToggleListener {
 
     companion object {
         private const val ANIMATION_DURATION = 200L
@@ -38,6 +38,7 @@ class SlidingTabStrip : LinearLayout {
     private var animateLeftX = 0f
     private var animateY = 0f
     private var isMenuToggle: Boolean = false
+    internal val menuToggleListener: MenuToggleListener = this
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -144,10 +145,10 @@ class SlidingTabStrip : LinearLayout {
     }
 
     /**
-     * Animate the icon tabs moving down when the ArcMenu is open
+     * Animate the icon listOfTabs moving down when the ArcMenu is open
      */
 
-    internal fun onOpenMenu() {
+    override fun onOpenMenu() {
         if ((parent as ColorMatchTabLayout).tabs.count() <= INVALID_TABS_AMOUNT && (parent as ColorMatchTabLayout).tabs.count() > 2) {
             animateIconTabs(0f, (height * 2).toFloat())
         } else {
@@ -156,10 +157,10 @@ class SlidingTabStrip : LinearLayout {
     }
 
     /**
-     * Animate the icon tabs moving up when the ArcMenu is closed
+     * Animate the icon listOfTabs moving up when the ArcMenu is closed
      */
 
-    internal fun onCloseMenu() {
+    override fun onCloseMenu() {
         animateIconTabs((height * 2).toFloat(), 0f)
     }
 
