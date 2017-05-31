@@ -135,7 +135,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     override fun onClick(v: View?) {
         if(!(parent as SlidingTabStrip).isAnimate) {
             val clickedTabView = v as ColorTabView?
-            if((parent.parent as ColorMatchTabLayout).selectedTab != clickedTabView?.tab) {
+            if((parent.parent as ColorMatchTabLayout).internalSelectedTab != clickedTabView?.tab) {
                 (parent.parent as ColorMatchTabLayout).select(clickedTabView?.tab)
                 this.clickedTabView = clickedTabView
             }
