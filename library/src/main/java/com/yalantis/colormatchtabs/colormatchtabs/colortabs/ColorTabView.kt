@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.support.v7.app.ActionBar
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
@@ -42,7 +43,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     internal lateinit var iconView: ImageView
     internal var clickedTabView: ColorTabView? = null
 
-    fun initColorTabView() {
+    private fun initColorTabView() {
         gravity = Gravity.CENTER
         orientation = HORIZONTAL
         isClickable = true
@@ -58,7 +59,6 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         textView = TextView(context)
         addView(textView)
     }
-
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onInitializeAccessibilityEvent(event: AccessibilityEvent) {
@@ -107,15 +107,14 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         updateView()
     }
 
-    fun updateView() {
-        //TODO think about optimize call this method!!
+    internal fun updateView() {
+        //TODO optimize when app start
         val colorTab = tab
         if (tab?.isSelected ?: false) {
             textView.apply {
                 visibility = View.VISIBLE
                 text = colorTab?.text
                 setTextColor(getBackgroundColor())
-                requestLayout()
             }
         } else {
             textView.visibility = View.GONE

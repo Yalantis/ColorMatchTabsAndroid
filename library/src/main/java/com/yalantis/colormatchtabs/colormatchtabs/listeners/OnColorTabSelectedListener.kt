@@ -24,12 +24,4 @@ interface OnColorTabSelectedListener {
      */
     fun onUnselectedTab(tab: ColorTab?)
 
-    /**
-     * Called when a tab that is already selected is chosen again by the user. Some applications
-     * may use this action to return to the top level of a category.
-     *
-     * @param tab The tab that was reselected.
-     */
-    fun onReselectedTab(tab: ColorTab?)
-
 }

@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.widget.Toast
 import com.facebook.drawee.backends.pipeline.Fresco
@@ -49,9 +50,9 @@ class MainActivity : AppCompatActivity() {
                 toolbar.toolbarTitle.setTextColor(tab?.selectedColor ?: ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
             }
 
-            override fun onUnselectedTab(tab: ColorTab?) {Toast.makeText(this@MainActivity, "Unselected", Toast.LENGTH_LONG).show()}
-
-            override fun onReselectedTab(tab: ColorTab?) {Toast.makeText(this@MainActivity, "Reselected", Toast.LENGTH_LONG).show()}
+            override fun onUnselectedTab(tab: ColorTab?) {
+                Log.e("Unselected ", "tab")
+                Toast.makeText(this@MainActivity, "Unselected", Toast.LENGTH_LONG).show()}
         })
         arcMenu.addMenuToggleListener(object : MenuToggleListener {
             override fun onOpenMenu() {

@@ -205,7 +205,6 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     internal fun select(colorTab: ColorTab?) {
         if (colorTab == internalSelectedTab) {
-            tabSelectedListener?.onReselectedTab(internalSelectedTab)
             return
         } else {
             previousSelectedTab = getSelectedTabView()
