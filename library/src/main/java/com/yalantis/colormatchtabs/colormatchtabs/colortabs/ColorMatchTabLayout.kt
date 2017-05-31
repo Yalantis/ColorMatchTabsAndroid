@@ -29,16 +29,32 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     internal var internalSelectedTab: ColorTab? = null
     internal var tabMaxWidth = Integer.MAX_VALUE
     internal var previousSelectedTab: ColorTabView? = null
-    var selectedTabIndex: Int = 0
+
+    /**
+     * Sets selected ColorTab by position
+     */
+    var selectedTabIndex: Int = -1
         set(value) {
             field = value
             select(getTabAt(value))
         }
+
+    /**
+     * Sets selected ColorTab
+     */
     var selectedTab: ColorTab? = null
         set(value) {
             field = value
             select(value)
         }
+
+    /**
+     * Returns the position of the current selected tab.
+     *
+     * @return selected tab position, or {@code -1} if there isn't a selected tab.
+     */
+    var selectedTabPosition: Int = -1
+        get() = internalSelectedTab?.position ?: -1
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -173,7 +189,6 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
      * Add {@link OnColorTabSelectedListener}
      * @param tabSelectedListener listener to add
      */
-
     fun addOnColorTabSelectedListener(tabSelectedListener: OnColorTabSelectedListener) {
         this.tabSelectedListener = tabSelectedListener
     }
@@ -190,14 +205,16 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     internal fun select(colorTab: ColorTab?) {
         if (colorTab == internalSelectedTab) {
+            tabSelectedListener?.onReselectedTab(internalSelectedTab)
             return
         } else {
             previousSelectedTab = getSelectedTabView()
             internalSelectedTab?.isSelected = false
+            tabSelectedListener?.onUnselectedTab(internalSelectedTab)
             internalSelectedTab = colorTab
             internalSelectedTab?.isSelected = true
+            tabSelectedListener?.onSelectedTab(colorTab)
         }
-        tabSelectedListener?.onSelectedTab(colorTab)
     }
 
     internal fun getSelectedTabView() = tabStrip.getChildAt(internalSelectedTab?.position ?: 0) as ColorTabView?
@@ -210,8 +227,14 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         arcMenu.menuToggleListener = tabStrip.menuToggleListener
     }
 
+    /**
+     * Call when ArcMenu is open
+     */
     override fun onOpenMenu() = tabStrip.onOpenMenu()
 
+    /**
+     * Call when ArcMenu is closed
+     */
     override fun onCloseMenu() = tabStrip.onCloseMenu()
 
 }

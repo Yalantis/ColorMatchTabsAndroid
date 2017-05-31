@@ -48,6 +48,10 @@ class MainActivity : AppCompatActivity() {
                 viewPager.setBackgroundColor(tab?.selectedColor ?: ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
                 toolbar.toolbarTitle.setTextColor(tab?.selectedColor ?: ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
             }
+
+            override fun onUnselectedTab(tab: ColorTab?) {Toast.makeText(this@MainActivity, "Unselected", Toast.LENGTH_LONG).show()}
+
+            override fun onReselectedTab(tab: ColorTab?) {Toast.makeText(this@MainActivity, "Reselected", Toast.LENGTH_LONG).show()}
         })
         arcMenu.addMenuToggleListener(object : MenuToggleListener {
             override fun onOpenMenu() {
