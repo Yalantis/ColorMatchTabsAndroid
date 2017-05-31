@@ -26,7 +26,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     internal lateinit var tabStrip: SlidingTabStrip
     internal var tabs: MutableList<ColorTab> = mutableListOf()
     private var tabSelectedListener: OnColorTabSelectedListener? = null
-    internal var selectedTab: ColorTab? = null
+    var selectedTab: ColorTab? = null
     internal var tabMaxWidth = Integer.MAX_VALUE
     internal var previousSelectedTab: ColorTabView? = null
 
@@ -159,6 +159,11 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         }
     }
 
+    /**
+     * Add {@link OnColorTabSelectedListener}
+     * @param tabSelectedListener listener to add
+     */
+
     fun addOnColorTabSelectedListener(tabSelectedListener: OnColorTabSelectedListener) {
         this.tabSelectedListener = tabSelectedListener
     }
@@ -191,6 +196,9 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     internal fun getSelectedTabView() = tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
 
+    /**
+     * Add {@link ArcMenu}
+     */
     fun addArcMenu(arcMenu: ArcMenu) = arcMenu.apply {
         arcMenu.listOfTabs = tabs
         arcMenu.menuToggleListener = tabStrip.menuToggleListener
