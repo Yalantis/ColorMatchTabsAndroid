@@ -52,13 +52,9 @@ class MenuView : LinearLayout {
                 override fun onAnimationStart(animation: Animator?) {
                     super.onAnimationStart(animation)
                     if (!isMenuOpen) {
-                        (0..childCount).forEach {
-                            getChildAt(0).visibility = View.GONE
-                        }
+                        getChildAt(0).visibility = View.GONE
                     } else {
-                        (0..childCount).forEach {
-                            getChildAt(0).visibility = View.VISIBLE
-                        }
+                        getChildAt(0).visibility = View.VISIBLE
                     }
                 }
 

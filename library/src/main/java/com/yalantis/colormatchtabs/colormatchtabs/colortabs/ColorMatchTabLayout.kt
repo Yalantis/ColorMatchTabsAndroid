@@ -26,9 +26,19 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     internal lateinit var tabStrip: SlidingTabStrip
     internal var tabs: MutableList<ColorTab> = mutableListOf()
     private var tabSelectedListener: OnColorTabSelectedListener? = null
-    var selectedTab: ColorTab? = null
+    internal var internalSelectedTab: ColorTab? = null
     internal var tabMaxWidth = Integer.MAX_VALUE
     internal var previousSelectedTab: ColorTabView? = null
+    var selectedTabIndex: Int = 0
+        set(value) {
+            field = value
+            select(getTabAt(value))
+        }
+    var selectedTab: ColorTab? = null
+        set(value) {
+            field = value
+            select(value)
+        }
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -83,7 +93,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     fun addTab(tab: ColorTab) {
         tab.isSelected = tabs.isEmpty()
         if (tab.isSelected) {
-            selectedTab = tab
+            internalSelectedTab = tab
         }
         addColorTabView(tab)
     }
@@ -178,23 +188,19 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         }
     }
 
-    fun setSelectedTab(position: Int) {
-        select(getTabAt(position))
-    }
-
     internal fun select(colorTab: ColorTab?) {
-        if (colorTab == selectedTab) {
+        if (colorTab == internalSelectedTab) {
             return
         } else {
             previousSelectedTab = getSelectedTabView()
-            selectedTab?.isSelected = false
-            selectedTab = colorTab
-            selectedTab?.isSelected = true
+            internalSelectedTab?.isSelected = false
+            internalSelectedTab = colorTab
+            internalSelectedTab?.isSelected = true
         }
         tabSelectedListener?.onSelectedTab(colorTab)
     }
 
-    internal fun getSelectedTabView() = tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
+    internal fun getSelectedTabView() = tabStrip.getChildAt(internalSelectedTab?.position ?: 0) as ColorTabView?
 
     /**
      * Add {@link ArcMenu}

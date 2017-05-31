@@ -97,7 +97,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         super.onLayout(changed, l, t, r, b)
         iconView.setPadding(getDimen(R.dimen.normal_margin), 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
         textView.setPadding(0, 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
-        if (clickedTabView != null) {
+        if(clickedTabView != null) {
             (parent as SlidingTabStrip).animateDrawTab(clickedTabView)
         }
     }
@@ -111,10 +111,12 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         //TODO think about optimize call this method!!
         val colorTab = tab
         if (tab?.isSelected ?: false) {
-            textView.visibility = View.VISIBLE
-            textView.text = colorTab?.text
-            textView.setTextColor(getBackgroundColor())
-            textView.requestLayout()
+            textView.apply {
+                visibility = View.VISIBLE
+                text = colorTab?.text
+                setTextColor(getBackgroundColor())
+                requestLayout()
+            }
         } else {
             textView.visibility = View.GONE
         }
@@ -129,7 +131,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     override fun onClick(v: View?) {
         if (!(parent as SlidingTabStrip).isAnimate) {
             val clickedTabView = v as ColorTabView?
-            if ((parent.parent as ColorMatchTabLayout).selectedTab != clickedTabView?.tab) {
+            if((parent.parent as ColorMatchTabLayout).internalSelectedTab != clickedTabView?.tab) {
                 (parent.parent as ColorMatchTabLayout).select(clickedTabView?.tab)
                 this.clickedTabView = clickedTabView
             }
@@ -147,7 +149,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
 
     private fun getBackgroundColor(): Int {
         var color = getColor(R.color.mainBackgroundColor)
-        if (parent != null) {
+        if(parent != null) {
             val background = (parent.parent as ColorMatchTabLayout).background
             if (background is ColorDrawable) {
                 color = background.color
