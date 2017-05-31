@@ -31,6 +31,16 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     internal var previousSelectedTab: ColorTabView? = null
 
     /**
+     * Set selected ColorTab width in portrait orientation. Default max tab width is 146dp
+     */
+    var selectedTabWidth = getDimen(R.dimen.tab_max_width)
+
+    /**
+     * Set selected ColorTab width in horizontal orientation. Default max tab width is 146dp
+     */
+    var selectedTabHorizontalWidth = getDimen(R.dimen.tab_max_width_horizontal)
+
+    /**
      * Sets selected ColorTab by position
      */
     var selectedTabIndex: Int = -1
@@ -90,7 +100,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
             // If we don't have an unspecified width spec, use the given size to calculate
             // the max tab width
             val systemService = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val selectTabWidth = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) getDimen(R.dimen.tab_max_width) else getDimen(R.dimen.tab_max_width_horizontal)
+            val selectTabWidth = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) selectedTabWidth else selectedTabHorizontalWidth
             val probable = (systemService.defaultDisplay.width - selectTabWidth) / (tabs.size - 1)
             tabMaxWidth = if (probable < getDimen(R.dimen.default_width)) getDimen(R.dimen.default_width) else probable
 
@@ -140,7 +150,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
         val count = tabs.size
         for (i in position + 1..count - 1) {
-            tabs.get(i).position = i
+            tabs[i].position = i
         }
     }
 

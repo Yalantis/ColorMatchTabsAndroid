@@ -84,7 +84,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         if (maxWidth > 0 && (specWidthMode == MeasureSpec.UNSPECIFIED || specWidthSize > maxWidth)) {
             // If we have a max width and a given spec which is either unspecified or
             // larger than the max width, update the width spec using the same mode
-            val selectTabMaxWidth = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) getDimen(R.dimen.tab_max_width) else getDimen(R.dimen.tab_max_width_horizontal)
+            val selectTabMaxWidth = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) (parent.parent as ColorMatchTabLayout).selectedTabWidth else (parent.parent as ColorMatchTabLayout).selectedTabHorizontalWidth
             widthMeasureSpec = MeasureSpec.makeMeasureSpec(if (tab?.isSelected ?: false) selectTabMaxWidth else maxWidth, MeasureSpec.EXACTLY)
         } else {
             // Else, use the original width spec
@@ -108,7 +108,6 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     }
 
     internal fun updateView() {
-        //TODO optimize when app start
         val colorTab = tab
         if (tab?.isSelected ?: false) {
             textView.apply {

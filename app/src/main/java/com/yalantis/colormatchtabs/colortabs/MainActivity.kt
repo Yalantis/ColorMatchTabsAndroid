@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
@@ -41,26 +42,27 @@ class MainActivity : AppCompatActivity() {
 
         viewPager.adapter = ColorTabsAdapter(supportFragmentManager, colorMatchTabLayout.count())
         viewPager.addOnPageChangeListener(ColorTabLayoutOnPageChangeListener(colorMatchTabLayout))
+        //TODO think how change this ugly methods!!
         viewPager.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGreen))
+        viewPager.background.alpha = 128
         colorMatchTabLayout.addArcMenu(arcMenu)
         colorMatchTabLayout.addOnColorTabSelectedListener(object : OnColorTabSelectedListener {
             override fun onSelectedTab(tab: ColorTab?) {
                 viewPager.currentItem = tab?.position ?: 0
                 viewPager.setBackgroundColor(tab?.selectedColor ?: ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
+                viewPager.background.alpha = 128
                 toolbar.toolbarTitle.setTextColor(tab?.selectedColor ?: ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
             }
 
-            override fun onUnselectedTab(tab: ColorTab?) {
-                Log.e("Unselected ", "tab")
-                Toast.makeText(this@MainActivity, "Unselected", Toast.LENGTH_LONG).show()}
+            override fun onUnselectedTab(tab: ColorTab?) {Log.e("Unselected ", "tab")}
         })
         arcMenu.addMenuToggleListener(object : MenuToggleListener {
             override fun onOpenMenu() {
-                viewUnderMenu.animateBackground(true)
+                viewUnderMenu.animateView(true)
             }
 
             override fun onCloseMenu() {
-                viewUnderMenu.animateBackground(false)
+                viewUnderMenu.animateView(false)
             }
         })
         arcMenu.addOnClickListener(object : OnArcMenuListener {
