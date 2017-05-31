@@ -155,23 +155,7 @@ class ArcMenu : FrameLayout {
                 currentRadius = animatedValue as Float
                 invalidate()
             }
-            addListener(object : Animator.AnimatorListener {
-                override fun onAnimationRepeat(animation: Animator?) {
-
-                }
-
-                override fun onAnimationEnd(animation: Animator?) {
-                    isMenuAnimating = false
-                }
-
-                override fun onAnimationCancel(animation: Animator?) {
-
-                }
-
-                override fun onAnimationStart(animation: Animator?) {
-                    isMenuAnimating = true
-                }
-            })
+            addListener(animationListener)
         }.start()
     }
 
@@ -191,23 +175,7 @@ class ArcMenu : FrameLayout {
                 currentRadius = animatedValue as Float
                 invalidate()
             }
-            addListener(object : Animator.AnimatorListener {
-                override fun onAnimationRepeat(animation: Animator?) {
-
-                }
-
-                override fun onAnimationEnd(animation: Animator?) {
-                    isMenuAnimating = false
-                }
-
-                override fun onAnimationCancel(animation: Animator?) {
-
-                }
-
-                override fun onAnimationStart(animation: Animator?) {
-                    isMenuAnimating = true
-                }
-            })
+            addListener(animationListener)
         }.start()
     }
 
@@ -248,6 +216,24 @@ class ArcMenu : FrameLayout {
                     arcMenuListener?.onClick(index)
                 }
             }
+        }
+    }
+
+    private val animationListener = object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(animation: Animator?) {
+
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            isMenuAnimating = false
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+
+        }
+
+        override fun onAnimationStart(animation: Animator?) {
+            isMenuAnimating = true
         }
     }
 

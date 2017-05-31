@@ -19,6 +19,10 @@ class ListItemsFragment : Fragment() {
         fun newInstance() = ListItemsFragment()
     }
 
+    private val listOfPictures by lazy { listOf(BASE_SCHEME + R.drawable.eat, BASE_SCHEME + R.drawable.coffe)}
+    private val listOfDishName by lazy { listOf(context.getString(R.string.caesar), context.getString(R.string.latte)) }
+    private val listOfRestaurant by lazy { listOf(context.getString(R.string.cafe), context.getString(R.string.stareducks)) }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater?.inflate(R.layout.fragment_list_items, container, false)
@@ -33,12 +37,10 @@ class ListItemsFragment : Fragment() {
 
     private fun createListItems(): List<Menu> {
         val list = mutableListOf<Menu>()
-        list.add(Menu(BASE_SCHEME + R.drawable.eat, context.getString(R.string.caesar), context.getString(R.string.cafe), context.getString(R.string.caesar_review)))
-        list.add(Menu(BASE_SCHEME + R.drawable.coffe, context.getString(R.string.latte), context.getString(R.string.stareducks), context.getString(R.string.caesar_review)))
-        list.add(Menu(BASE_SCHEME + R.drawable.eat, context.getString(R.string.caesar), context.getString(R.string.cafe), context.getString(R.string.caesar_review)))
-        list.add(Menu(BASE_SCHEME + R.drawable.coffe, context.getString(R.string.latte), context.getString(R.string.stareducks), context.getString(R.string.caesar_review)))
-        list.add(Menu(BASE_SCHEME + R.drawable.eat, context.getString(R.string.caesar), context.getString(R.string.cafe), context.getString(R.string.caesar_review)))
-        list.add(Menu(BASE_SCHEME + R.drawable.coffe, context.getString(R.string.latte), context.getString(R.string.stareducks), context.getString(R.string.caesar_review)))
+        for(i in 0..5) {
+            val index = i.rem(2)
+            list.add(Menu(listOfPictures[index], listOfDishName[index], listOfRestaurant[index], context.getString(R.string.caesar_review)))
+        }
         return list
     }
 

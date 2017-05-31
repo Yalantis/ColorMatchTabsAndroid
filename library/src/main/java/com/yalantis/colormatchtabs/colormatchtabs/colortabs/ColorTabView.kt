@@ -115,10 +115,12 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         //TODO think about optimize call this method!!
         val colorTab = tab
         if (tab?.isSelected ?: false) {
-            textView.visibility = View.VISIBLE
-            textView.text = colorTab?.text
-            textView.setTextColor(getBackgroundColor())
-            textView.requestLayout()
+            textView.apply {
+                visibility = View.VISIBLE
+                text = colorTab?.text
+                setTextColor(getBackgroundColor())
+                requestLayout()
+            }
         } else {
             textView.visibility = View.GONE
         }
