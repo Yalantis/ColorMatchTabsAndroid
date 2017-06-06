@@ -17,6 +17,8 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_DURATION
+import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_TEXT_APPEARANCE_DURATION
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
 import com.yalantis.colormatchtabs.colormatchtabs.utils.getColor
@@ -112,8 +114,10 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         if (tab?.isSelected ?: false) {
             textView.apply {
                 visibility = View.VISIBLE
+                alpha = 0f
                 text = colorTab?.text
                 setTextColor(getBackgroundColor())
+                animatePlayButton()
             }
         } else {
             textView.visibility = View.GONE
@@ -124,6 +128,13 @@ class ColorTabView : LinearLayout, View.OnClickListener {
             iconView.requestLayout()
         }
         requestLayout()
+    }
+
+    private fun animatePlayButton() {
+        textView.animate()
+                .alpha(1f)
+                .setDuration(ANIMATION_TEXT_APPEARANCE_DURATION)
+                .start()
     }
 
     override fun onClick(v: View?) {

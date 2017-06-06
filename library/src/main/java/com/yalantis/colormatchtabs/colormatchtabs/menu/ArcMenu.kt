@@ -17,6 +17,8 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
+import com.yalantis.colormatchtabs.colormatchtabs.Constant
+import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_DURATION
 import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnArcMenuListener
@@ -32,7 +34,6 @@ class ArcMenu : FrameLayout {
 
     companion object {
         private const val MAX_ANGLE_FOR_MENU = 140.0
-        private const val ANIMATION_DURATON = 200L
         private const val START_MENU_ANGLE = -20.0
         private const val CONTROL_X1 = 0.250f
         private const val CONTROL_Y1 = 0.270f
@@ -147,7 +148,7 @@ class ArcMenu : FrameLayout {
 
     private fun animateOpenMenu() {
         ValueAnimator.ofFloat(0f, calculateRadius().toFloat()).apply {
-            duration = ANIMATION_DURATON
+            duration = ANIMATION_DURATION
             interpolator = PathInterpolatorCompat.create(CONTROL_X1, CONTROL_Y1, CONTROL_X2, CONTROL_Y2)
             addUpdateListener {
                 currentRadius = animatedValue as Float
@@ -167,7 +168,7 @@ class ArcMenu : FrameLayout {
 
     private fun animateCloseMenu() {
         ValueAnimator.ofFloat(calculateRadius().toFloat(), 0f).apply {
-            duration = ANIMATION_DURATON
+            duration = ANIMATION_DURATION
             interpolator = FastOutLinearInInterpolator()
             addUpdateListener {
                 currentRadius = animatedValue as Float

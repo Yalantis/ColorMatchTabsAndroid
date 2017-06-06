@@ -68,7 +68,9 @@ class MenuView : LinearLayout {
                         getChildAt(0).visibility = View.GONE
                     } else {
                         getChildAt(0).visibility = View.VISIBLE
+                        getChildAt(0).alpha = 0f
                     }
+                    animatePlayButton(isMenuOpen)
                 }
 
                 override fun onAnimationEnd(animation: Animator?) {
@@ -79,6 +81,13 @@ class MenuView : LinearLayout {
                 }
             })
         }.start()
+    }
+
+    private fun animatePlayButton(isVisible: Boolean) {
+        getChildAt(0).animate()
+                .alpha(if (isVisible) 1f else 0f)
+                .setDuration(ANIMATION_DURATION)
+                .start()
     }
 
     override fun onDraw(canvas: Canvas?) {

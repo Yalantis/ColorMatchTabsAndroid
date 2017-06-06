@@ -11,6 +11,8 @@ import android.support.v4.view.animation.PathInterpolatorCompat
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.LinearLayout
+import com.yalantis.colormatchtabs.colormatchtabs.Constant
+import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_DURATION
 import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.utils.InvalidNumberOfTabs
@@ -23,7 +25,6 @@ import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimenToFloat
 class SlidingTabStrip : LinearLayout, MenuToggleListener {
 
     companion object {
-        private const val ANIMATION_DURATION = 200L
         private const val CONTROL_X1 = 0.175f
         private const val CONTROL_Y1 = 0.885f
         private const val CONTROL_X2 = 0.360f
@@ -95,7 +96,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
 
     internal fun animateDrawTab(child: ColorTabView?) {
         ValueAnimator.ofFloat((parent as ColorMatchTabLayout).previousSelectedTab?.x ?: 0f, child?.x ?: 0f).apply {
-            duration = ANIMATION_DURATION
+            duration = Constant.ANIMATION_DURATION
             interpolator = PathInterpolatorCompat.create(CONTROL_X1, CONTROL_Y1, CONTROL_X2, CONTROL_Y2)
             addUpdateListener {
                 animateLeftX = animatedValue as Float
