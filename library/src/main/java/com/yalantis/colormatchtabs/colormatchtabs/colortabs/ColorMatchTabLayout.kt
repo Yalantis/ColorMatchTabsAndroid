@@ -81,7 +81,8 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     }
 
     private fun initViewTreeObserver(typedArray: TypedArray) {
-        typedArray.getDimensionPixelSize(R.styleable.TabLayout_tabMinWidth, INVALID_WIDTH)
+        selectedTabWidth = typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabWidth, INVALID_WIDTH)
+        selectedTabHorizontalWidth = typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabHorizontalWidth, INVALID_WIDTH)
         typedArray.recycle()
     }
 
