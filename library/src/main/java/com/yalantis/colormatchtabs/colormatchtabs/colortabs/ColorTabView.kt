@@ -100,7 +100,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         iconView.setPadding(getDimen(R.dimen.normal_margin), 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
         textView.setPadding(0, 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
         if(clickedTabView != null) {
-            (parent as SlidingTabStrip).animateDrawTab(clickedTabView)
+            (parent as SlidingTabStripLayout).animateDrawTab(clickedTabView)
         }
     }
 
@@ -138,7 +138,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        if (!(parent as SlidingTabStrip).isAnimate) {
+        if (!(parent as SlidingTabStripLayout).isAnimate) {
             val clickedTabView = v as ColorTabView?
             if((parent.parent as ColorMatchTabLayout).internalSelectedTab != clickedTabView?.tab) {
                 (parent.parent as ColorMatchTabLayout).select(clickedTabView?.tab)

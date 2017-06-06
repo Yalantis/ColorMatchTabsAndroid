@@ -1,6 +1,7 @@
 package com.yalantis.colormatchtabs.colormatchtabs.menu
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -102,7 +103,7 @@ class ArcMenu : FrameLayout {
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             fab.layoutParams = fabLayoutParams
         }
     }
@@ -217,17 +218,10 @@ class ArcMenu : FrameLayout {
         }
     }
 
-    private val animationListener = object : Animator.AnimatorListener {
-        override fun onAnimationRepeat(animation: Animator?) {
-
-        }
+    private val animationListener = object : AnimatorListenerAdapter() {
 
         override fun onAnimationEnd(animation: Animator?) {
             isMenuAnimating = false
-        }
-
-        override fun onAnimationCancel(animation: Animator?) {
-
         }
 
         override fun onAnimationStart(animation: Animator?) {

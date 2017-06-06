@@ -1,6 +1,7 @@
 package com.yalantis.colormatchtabs.colormatchtabs.colortabs
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -22,7 +23,7 @@ import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimenToFloat
 /**
  * Created by anna on 11.05.17.
  */
-class SlidingTabStrip : LinearLayout, MenuToggleListener {
+class SlidingTabStripLayout : LinearLayout, MenuToggleListener {
 
     companion object {
         private const val CONTROL_X1 = 0.175f
@@ -102,16 +103,11 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
                 animateLeftX = animatedValue as Float
                 invalidate()
             }
-            addListener(object : Animator.AnimatorListener {
-                override fun onAnimationRepeat(animation: Animator?) {
-                }
+            addListener(object : AnimatorListenerAdapter()  {
 
                 override fun onAnimationEnd(animation: Animator?) {
                     child?.clickedTabView = null
                     isAnimate = false
-                }
-
-                override fun onAnimationCancel(animation: Animator?) {
                 }
 
                 override fun onAnimationStart(animation: Animator?) {
@@ -141,7 +137,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
             left = if (child.tab?.position == FIRST_TAB_POSITION) leftX.minus(getDimen(R.dimen.radius)) else leftX
             right = if (child.tab?.position == (parent as ColorMatchTabLayout).count()?.minus(1)) leftX.plus(child.width).plus(getDimen(R.dimen.radius)) else leftX.plus(child.width)
         }
-        val rectangle = RectF(left, if (isMenuToggle) animateY else 0f, right, child.height.toFloat())
+        val rectangle = RectF(left,if (isMenuToggle) animateY else 0f, right, child.height.toFloat())
         canvas?.drawRoundRect(rectangle, getDimenToFloat(R.dimen.radius), getDimenToFloat(R.dimen.radius), backgroundPaint)
     }
 
@@ -174,15 +170,10 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
                     child.iconView.translationY = animatedValue as Float
                 }
             }
-            addListener(object : Animator.AnimatorListener {
-                override fun onAnimationRepeat(animation: Animator?) {
-                }
+            addListener(object : AnimatorListenerAdapter()  {
 
                 override fun onAnimationEnd(animation: Animator?) {
                     isMenuToggle = false
-                }
-
-                override fun onAnimationCancel(animation: Animator?) {
                 }
 
                 override fun onAnimationStart(animation: Animator?) {

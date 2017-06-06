@@ -23,7 +23,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         private const val INVALID_WIDTH = -1
     }
 
-    internal lateinit var tabStrip: SlidingTabStrip
+    internal lateinit var tabStripLayout: SlidingTabStripLayout
     internal var tabs: MutableList<ColorTab> = mutableListOf()
     private var tabSelectedListener: OnColorTabSelectedListener? = null
     internal var internalSelectedTab: ColorTab? = null
@@ -74,8 +74,8 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     private fun initLayout(attrs: AttributeSet?, defStyleAttr: Int) {
         isHorizontalScrollBarEnabled = false
-        tabStrip = SlidingTabStrip(context)
-        super.addView(tabStrip, 0, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        tabStripLayout = SlidingTabStripLayout(context)
+        super.addView(tabStripLayout, 0, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorMatchTabLayout)
         initViewTreeObserver(typedArray)
     }
@@ -126,7 +126,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     private fun addColorTabView(tab: ColorTab) {
         configureTab(tab, tabs.size)
-        tabStrip.addView(tab.tabView, tab.position, createLayoutParamsForTabs())
+        tabStripLayout.addView(tab.tabView, tab.position, createLayoutParamsForTabs())
     }
 
     /**
@@ -185,7 +185,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     internal fun setScrollPosition(position: Int, positionOffset: Float, updateSelectedText: Boolean) {
         val roundedPosition = Math.round(position + positionOffset)
-        if (roundedPosition < 0 || roundedPosition >= tabStrip.childCount) {
+        if (roundedPosition < 0 || roundedPosition >= tabStripLayout.childCount) {
             return
         }
 
@@ -204,10 +204,10 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     }
 
     private fun setSelectedTabView(position: Int) {
-        val tabCount = tabStrip.childCount
+        val tabCount = tabStripLayout.childCount
         if (position < tabCount) {
             (0..tabCount - 1).map {
-                val child = tabStrip.getChildAt(it)
+                val child = tabStripLayout.getChildAt(it)
                 child.isSelected = it == position
             }
         }
@@ -226,24 +226,24 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         }
     }
 
-    internal fun getSelectedTabView() = tabStrip.getChildAt(internalSelectedTab?.position ?: 0) as ColorTabView?
+    internal fun getSelectedTabView() = tabStripLayout.getChildAt(internalSelectedTab?.position ?: 0) as ColorTabView?
 
     /**
      * Add {@link ArcMenu}
      */
     fun addArcMenu(arcMenu: ArcMenu) = arcMenu.apply {
         arcMenu.listOfTabs = tabs
-        arcMenu.menuToggleListener = tabStrip.menuToggleListener
+        arcMenu.menuToggleListener = tabStripLayout.menuToggleListener
     }
 
     /**
      * Call when ArcMenu is open
      */
-    override fun onOpenMenu() = tabStrip.onOpenMenu()
+    override fun onOpenMenu() = tabStripLayout.onOpenMenu()
 
     /**
      * Call when ArcMenu is closed
      */
-    override fun onCloseMenu() = tabStrip.onCloseMenu()
+    override fun onCloseMenu() = tabStripLayout.onCloseMenu()
 
 }
