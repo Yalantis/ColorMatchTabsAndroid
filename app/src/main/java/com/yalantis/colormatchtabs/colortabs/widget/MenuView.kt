@@ -45,7 +45,7 @@ class MenuView : LinearLayout {
 
     fun animateView(isMenuOpen: Boolean) {
         this.isMenuOpen = isMenuOpen
-        if(isMenuOpen) {
+        if (isMenuOpen) {
             visibility = View.VISIBLE
         }
         animateBackground(isMenuOpen)

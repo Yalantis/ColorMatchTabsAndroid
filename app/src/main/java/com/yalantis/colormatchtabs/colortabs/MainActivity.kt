@@ -6,7 +6,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
-import android.view.View
 import android.widget.Toast
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
@@ -54,7 +53,9 @@ class MainActivity : AppCompatActivity() {
                 toolbar.toolbarTitle.setTextColor(tab?.selectedColor ?: ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
             }
 
-            override fun onUnselectedTab(tab: ColorTab?) {Log.e("Unselected ", "tab")}
+            override fun onUnselectedTab(tab: ColorTab?) {
+                Log.e("Unselected ", "tab")
+            }
         })
         arcMenu.addMenuToggleListener(object : MenuToggleListener {
             override fun onOpenMenu() {

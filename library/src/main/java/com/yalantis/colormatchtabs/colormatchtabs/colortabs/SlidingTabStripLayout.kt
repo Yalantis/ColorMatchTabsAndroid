@@ -103,7 +103,7 @@ class SlidingTabStripLayout : LinearLayout, MenuToggleListener {
                 animateLeftX = animatedValue as Float
                 invalidate()
             }
-            addListener(object : AnimatorListenerAdapter()  {
+            addListener(object : AnimatorListenerAdapter() {
 
                 override fun onAnimationEnd(animation: Animator?) {
                     child?.clickedTabView = null
@@ -137,7 +137,7 @@ class SlidingTabStripLayout : LinearLayout, MenuToggleListener {
             left = if (child.tab?.position == FIRST_TAB_POSITION) leftX.minus(getDimen(R.dimen.radius)) else leftX
             right = if (child.tab?.position == (parent as ColorMatchTabLayout).count()?.minus(1)) leftX.plus(child.width).plus(getDimen(R.dimen.radius)) else leftX.plus(child.width)
         }
-        val rectangle = RectF(left,if (isMenuToggle) animateY else 0f, right, child.height.toFloat())
+        val rectangle = RectF(left, if (isMenuToggle) animateY else 0f, right, child.height.toFloat())
         canvas?.drawRoundRect(rectangle, getDimenToFloat(R.dimen.radius), getDimenToFloat(R.dimen.radius), backgroundPaint)
     }
 
@@ -170,7 +170,7 @@ class SlidingTabStripLayout : LinearLayout, MenuToggleListener {
                     child.iconView.translationY = animatedValue as Float
                 }
             }
-            addListener(object : AnimatorListenerAdapter()  {
+            addListener(object : AnimatorListenerAdapter() {
 
                 override fun onAnimationEnd(animation: Animator?) {
                     isMenuToggle = false

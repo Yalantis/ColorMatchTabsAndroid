@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.support.v7.app.ActionBar
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
@@ -17,7 +16,6 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_DURATION
 import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_TEXT_APPEARANCE_DURATION
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
@@ -99,7 +97,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
         super.onLayout(changed, l, t, r, b)
         iconView.setPadding(getDimen(R.dimen.normal_margin), 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
         textView.setPadding(0, 0, getDimen(R.dimen.normal_margin), getDimen(R.dimen.tab_padding))
-        if(clickedTabView != null) {
+        if (clickedTabView != null) {
             (parent as SlidingTabStripLayout).animateDrawTab(clickedTabView)
         }
     }
@@ -140,7 +138,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
     override fun onClick(v: View?) {
         if (!(parent as SlidingTabStripLayout).isAnimate) {
             val clickedTabView = v as ColorTabView?
-            if((parent.parent as ColorMatchTabLayout).internalSelectedTab != clickedTabView?.tab) {
+            if ((parent.parent as ColorMatchTabLayout).internalSelectedTab != clickedTabView?.tab) {
                 (parent.parent as ColorMatchTabLayout).select(clickedTabView?.tab)
                 this.clickedTabView = clickedTabView
             }
@@ -158,7 +156,7 @@ class ColorTabView : LinearLayout, View.OnClickListener {
 
     private fun getBackgroundColor(): Int {
         var color = getColor(R.color.mainBackgroundColor)
-        if(parent != null) {
+        if (parent != null) {
             val background = (parent.parent as ColorMatchTabLayout).background
             if (background is ColorDrawable) {
                 color = background.color
