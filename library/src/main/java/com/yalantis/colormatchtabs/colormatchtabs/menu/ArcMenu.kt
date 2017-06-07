@@ -101,10 +101,14 @@ class ArcMenu : FrameLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
+    var isLayoutParamNeedToSet = true
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            fab.layoutParams = fabLayoutParams
+            if(isLayoutParamNeedToSet) {
+                fab.layoutParams = fabLayoutParams
+                isLayoutParamNeedToSet = false
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.TypedArray
 import android.util.AttributeSet
+import android.util.Log
 import android.view.WindowManager
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
@@ -81,8 +82,12 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     }
 
     private fun initViewTreeObserver(typedArray: TypedArray) {
-        selectedTabWidth = typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabWidth, INVALID_WIDTH)
-        selectedTabHorizontalWidth = typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabHorizontalWidth, INVALID_WIDTH)
+        if(typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabWidth, INVALID_WIDTH) != INVALID_WIDTH) {
+            selectedTabWidth = typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabWidth, INVALID_WIDTH)
+        }
+        if(typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabHorizontalWidth, INVALID_WIDTH) != INVALID_WIDTH) {
+            selectedTabHorizontalWidth = typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabHorizontalWidth, INVALID_WIDTH)
+        }
         typedArray.recycle()
     }
 
