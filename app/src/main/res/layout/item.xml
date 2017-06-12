@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="240dp"
+    android:layout_height="258dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     android:background="@drawable/background_item">
 
     <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/picture"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="200dp"
         fresco:backgroundImage="@drawable/eat"/>
 
     <RelativeLayout
@@ -16,23 +21,36 @@
         android:layout_height="60dp">
 
         <TextView
-            android:id="@+id/name_of_dish"
+            android:id="@+id/nameOfDish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Caesar Salad"
+            tools:text="Caesar Salad"
             android:textSize="18sp"
+            android:textColor="@color/colorDishText"
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"/>
 
         <TextView
-            android:id="@+id/restaurant_name"
+            android:id="@+id/restaurantName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/name_of_dish"
-            android:text="Cafe de Gargadem"
-            android:textSize="14sp"
+            android:layout_below="@+id/nameOfDish"
+            tools:text="Cafe de Gargadem"
+            android:textSize="12sp"
             android:layout_marginStart="10dp"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorCafeName"/>
+
+        <TextView
+            android:id="@+id/review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/colorReview"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="12dp"
+            tools:text="12.3K Reviews"/>
 
     </RelativeLayout>
 

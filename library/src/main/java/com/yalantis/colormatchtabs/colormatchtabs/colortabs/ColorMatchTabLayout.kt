@@ -1,6 +1,7 @@
 package com.yalantis.colormatchtabs.colormatchtabs.colortabs
 
 import android.content.Context
+import android.content.res.Configuration
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.WindowManager
@@ -11,7 +12,6 @@ import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedListener
 import com.yalantis.colormatchtabs.colormatchtabs.menu.ArcMenu
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
-import com.yalantis.colormatchtabs.colormatchtabs.utils.getColor
 import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimen
 
 /**
@@ -26,14 +26,19 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     internal lateinit var tabStrip: SlidingTabStrip
     internal var tabs: MutableList<ColorTab> = mutableListOf()
     private var tabSelectedListener: OnColorTabSelectedListener? = null
-    internal var selectedTab: ColorTab? = null
-    internal var backgroundColor: Int = getColor(R.color.mainBackgroundColor)
-        set(value) {
-            field = value
-            setBackgroundColor(value)
-        }
+    internal var internalSelectedTab: ColorTab? = null
     internal var tabMaxWidth = Integer.MAX_VALUE
     internal var previousSelectedTab: ColorTabView? = null
+    var selectedTabIndex: Int = 0
+        set(value) {
+            field = value
+            select(getTabAt(value))
+        }
+    var selectedTab: ColorTab? = null
+        set(value) {
+            field = value
+            select(value)
+        }
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -56,8 +61,8 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         typedArray.recycle()
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        var heightMeasureSpec = heightMeasureSpec
+    override fun onMeasure(widthMeasureSpec: Int, originHeightMeasureSpec: Int) {
+        var heightMeasureSpec = originHeightMeasureSpec
         // If we have a MeasureSpec which allows us to decide our height, try and use the default
         // height
         val idealHeight = (getDimen(R.dimen.default_height) + paddingTop + paddingBottom)
@@ -72,8 +77,10 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
             // If we don't have an unspecified width spec, use the given size to calculate
             // the max tab width
             val systemService = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val probable = (systemService.defaultDisplay.width - getDimen(R.dimen.tab_max_width)) / (tabs.size - 1)
+            val selectTabWidth = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) getDimen(R.dimen.tab_max_width) else getDimen(R.dimen.tab_max_width_horizontal)
+            val probable = (systemService.defaultDisplay.width - selectTabWidth) / (tabs.size - 1)
             tabMaxWidth = if (probable < getDimen(R.dimen.default_width)) getDimen(R.dimen.default_width) else probable
+
         }
 
         // Now super measure itself using the (possibly) modified height spec
@@ -84,7 +91,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     fun addTab(tab: ColorTab) {
         tab.isSelected = tabs.isEmpty()
         if (tab.isSelected) {
-            selectedTab = tab
+            internalSelectedTab = tab
         }
         addColorTabView(tab)
     }
@@ -98,7 +105,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         tabView = createTabView(this)
     }
 
-    fun createTabView(tab: ColorTab) = ColorTabView(context).apply {
+    private fun createTabView(tab: ColorTab) = ColorTabView(context).apply {
         this.tab = tab
     }
 
@@ -160,18 +167,18 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     }
 
     internal fun select(colorTab: ColorTab?) {
-        if (colorTab == selectedTab) {
+        if (colorTab == internalSelectedTab) {
             return
         } else {
             previousSelectedTab = getSelectedTabView()
-            selectedTab?.isSelected = false
-            selectedTab = colorTab
-            selectedTab?.isSelected = true
+            internalSelectedTab?.isSelected = false
+            internalSelectedTab = colorTab
+            internalSelectedTab?.isSelected = true
         }
         tabSelectedListener?.onSelectedTab(colorTab)
     }
 
-    internal fun getSelectedTabView() = tabStrip.getChildAt(selectedTab?.position ?: 0) as ColorTabView?
+    internal fun getSelectedTabView() = tabStrip.getChildAt(internalSelectedTab?.position ?: 0) as ColorTabView?
 
     fun addArcMenu(arcMenu: ArcMenu) = arcMenu.apply {
         arcMenu.listOfTabs = tabs

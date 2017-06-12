@@ -23,7 +23,7 @@ import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimenToFloat
 class SlidingTabStrip : LinearLayout, MenuToggleListener {
 
     companion object {
-        private const val ANIMATION_DURATON = 200L
+        private const val ANIMATION_DURATION = 200L
         private const val CONTROL_X1 = 0.175f
         private const val CONTROL_Y1 = 0.885f
         private const val CONTROL_X2 = 0.360f
@@ -95,7 +95,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
 
     internal fun animateDrawTab(child: ColorTabView?) {
         ValueAnimator.ofFloat((parent as ColorMatchTabLayout).previousSelectedTab?.x ?: 0f, child?.x ?: 0f).apply {
-            duration = ANIMATION_DURATON
+            duration = ANIMATION_DURATION
             interpolator = PathInterpolatorCompat.create(CONTROL_X1, CONTROL_Y1, CONTROL_X2, CONTROL_Y2)
             addUpdateListener {
                 animateLeftX = animatedValue as Float
@@ -166,7 +166,7 @@ class SlidingTabStrip : LinearLayout, MenuToggleListener {
 
     private fun animateIconTabs(start: Float, end: Float) {
         ValueAnimator.ofFloat(start, end).apply {
-            duration = ANIMATION_DURATON
+            duration = ANIMATION_DURATION
             addUpdateListener {
                 (0..childCount - 1).forEach {
                     val child = getChildAt(it) as ColorTabView

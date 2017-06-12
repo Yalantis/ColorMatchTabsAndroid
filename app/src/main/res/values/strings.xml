@@ -5,4 +5,11 @@
     <string name="reviews">Reviews</string>
     <string name="friends">Friends</string>
     <string name="haunt">Haunt</string>
+    <string name="question">Got something to add?</string>
+    <string name="description">HAUNT tastes better with more products, places, reviews and friends</string>
+    <string name="caesar">Caesar Salad</string>
+    <string name="cafe">Cafe de Gargadem</string>
+    <string name="caesar_review">12.3K Reviews</string>
+    <string name="latte">Latte Macchiato</string>
+    <string name="stareducks">Stareducks</string>
 </resources>

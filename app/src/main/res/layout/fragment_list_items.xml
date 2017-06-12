@@ -1,36 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/menuList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:fresco="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/background_item"
-            android:orientation="vertical">
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:layout_width="match_parent"
-                android:layout_height="258dp"
-                android:layout_marginTop="8dp"
-                fresco:actualImageScaleType="centerCrop"
-                fresco:backgroundImage="@drawable/salat" />
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:layout_width="match_parent"
-                android:layout_height="258dp"
-                android:layout_marginTop="8dp"
-                fresco:actualImageScaleType="centerCrop"
-                fresco:backgroundImage="@drawable/group_8" />
-
-        </LinearLayout>
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        tools:listitem="@android:layout/simple_list_item_checked" />
 
 </RelativeLayout>

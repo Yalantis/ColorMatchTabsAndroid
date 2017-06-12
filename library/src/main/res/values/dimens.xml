@@ -2,10 +2,12 @@
 <resources>
     <dimen name="radius">22dp</dimen>
     <dimen name="tab_max_width">146dp</dimen>
+    <dimen name="tab_max_width_horizontal">246dp</dimen>
     <dimen name="normal_margin">16dp</dimen>
     <dimen name="default_width">56dp</dimen>
     <dimen name="default_height">50dp</dimen>
     <dimen name="tab_padding">4dp</dimen>
     <dimen name="padding_normal">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
 </resources>

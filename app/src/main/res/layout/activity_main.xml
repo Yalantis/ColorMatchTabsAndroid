@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.yalantis.colormatchtabs.colortabs.MainActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -24,14 +28,14 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/haunt"
-            android:textStyle="bold"
             android:textAllCaps="true"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
     </android.support.v7.widget.Toolbar>
 
     <com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/colorMatchTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
@@ -41,10 +45,56 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/tabLayout" />
+        android:layout_below="@id/colorMatchTabLayout" />
+
+    </RelativeLayout>
+
+    <com.yalantis.colormatchtabs.colortabs.widget.MenuView
+        android:id="@+id/viewUnderMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center_horizontal|bottom"
+            android:text="@string/haunt"
+            android:textAllCaps="true"
+            android:textSize="60sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:text="@string/question"
+            android:textColor="@color/colorAccent"
+            android:textSize="26sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"
+            android:text="@string/description"
+            android:gravity="center_horizontal"
+            android:textSize="16sp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"/>
+        </LinearLayout>
+    </com.yalantis.colormatchtabs.colortabs.widget.MenuView>
 
 
     <com.yalantis.colormatchtabs.colormatchtabs.menu.ArcMenu
@@ -53,5 +103,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

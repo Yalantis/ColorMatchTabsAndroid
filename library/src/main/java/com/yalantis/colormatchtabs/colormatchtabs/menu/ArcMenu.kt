@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
+import android.os.Build
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.animation.FastOutLinearInInterpolator
@@ -14,8 +15,10 @@ import android.support.v4.view.animation.PathInterpolatorCompat
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
+import android.widget.ImageView
 import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnArcMenuListener
@@ -49,6 +52,7 @@ class ArcMenu : FrameLayout {
     internal var menuToggleListener: MenuToggleListener? = null
     private var userMenuToggleListener: MenuToggleListener? = null
     private var arcMenuListener: OnArcMenuListener? = null
+    private var isMenuAnimating: Boolean = false
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -66,13 +70,16 @@ class ArcMenu : FrameLayout {
 
     private fun initFab() {
         fab = FloatingActionButton(context)
-        fabLayoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        fabLayoutParams = LayoutParams(getDimen(R.dimen.fab_size), getDimen(R.dimen.fab_size))
         fabLayoutParams.gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
-        fab.layoutParams = fabLayoutParams
         fab.useCompatPadding = true
         fab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.plus))
-        addView(fab)
-        fab.setOnClickListener { drawMenu() }
+        super.addView(fab, 0, fabLayoutParams)
+        fab.setOnClickListener {
+            if(!isMenuAnimating) {
+                drawMenu()
+            }
+        }
     }
 
     fun addMenuToggleListener(toggleListener: MenuToggleListener) {
@@ -83,20 +90,22 @@ class ArcMenu : FrameLayout {
         this.arcMenuListener = arcMenuClick
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        var heightMeasureSpec = heightMeasureSpec
+    override fun onMeasure(widthMeasureSpec: Int, originHeightMeasureSpec: Int) {
+        var heightMeasureSpec = originHeightMeasureSpec
         val heightLayout = (fab.height * 2) + calculateRadius()
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(
-                Math.min(heightLayout, MeasureSpec.getSize(heightMeasureSpec)),
-                MeasureSpec.EXACTLY)
+        when (MeasureSpec.getMode(heightMeasureSpec)) {
+            MeasureSpec.AT_MOST -> heightMeasureSpec = MeasureSpec.makeMeasureSpec(
+                    Math.min(heightLayout, MeasureSpec.getSize(heightMeasureSpec)), MeasureSpec.EXACTLY)
+            MeasureSpec.UNSPECIFIED -> heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightLayout, MeasureSpec.EXACTLY)
+        }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-
     }
 
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        fabLayoutParams.bottomMargin = getDimen(R.dimen.margin_small)
-        fab.layoutParams = fabLayoutParams
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                fab.layoutParams = fabLayoutParams
+            }
     }
 
     private fun drawMenu() {
@@ -126,7 +135,7 @@ class ArcMenu : FrameLayout {
         var angleForChild = START_MENU_ANGLE
         listOfTabs.forEach {
             val childX = ((fab.x + (fab.width/2).toFloat()) - (currentRadius * Math.cos(Math.toRadians(angleForChild))).toFloat())
-            val childY = ((fab.y+ (fab.height/2).toFloat()) + (currentRadius * Math.sin(Math.toRadians(angleForChild))).toFloat())
+            val childY = ((fab.y + (fab.height/2).toFloat()) + (currentRadius * Math.sin(Math.toRadians(angleForChild))).toFloat())
             backgroundPaint.color = it.selectedColor
             canvas?.drawCircle(childX, childY, calculateCircleSize(), backgroundPaint)
             if (currentRadius >= (calculateRadius().toFloat() - (calculateRadius().toFloat() / 3)) && isMenuOpen) {
@@ -146,6 +155,7 @@ class ArcMenu : FrameLayout {
                 currentRadius = animatedValue as Float
                 invalidate()
             }
+            addListener(animationListener)
         }.start()
     }
 
@@ -165,6 +175,7 @@ class ArcMenu : FrameLayout {
                 currentRadius = animatedValue as Float
                 invalidate()
             }
+            addListener(animationListener)
         }.start()
     }
 
@@ -205,6 +216,24 @@ class ArcMenu : FrameLayout {
                     arcMenuListener?.onClick(index)
                 }
             }
+        }
+    }
+
+    private val animationListener = object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(animation: Animator?) {
+
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            isMenuAnimating = false
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+
+        }
+
+        override fun onAnimationStart(animation: Animator?) {
+            isMenuAnimating = true
         }
     }
 
