@@ -1,6 +1,7 @@
 package com.yalantis.colormatchtabs.colormatchtabs.menu
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -15,10 +16,10 @@ import android.support.v4.view.animation.PathInterpolatorCompat
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
-import android.widget.ImageView
+import com.yalantis.colormatchtabs.colormatchtabs.Constant
+import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_DURATION
 import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnArcMenuListener
@@ -34,7 +35,6 @@ class ArcMenu : FrameLayout {
 
     companion object {
         private const val MAX_ANGLE_FOR_MENU = 140.0
-        private const val ANIMATION_DURATON = 200L
         private const val START_MENU_ANGLE = -20.0
         private const val CONTROL_X1 = 0.250f
         private const val CONTROL_Y1 = 0.270f
@@ -76,7 +76,7 @@ class ArcMenu : FrameLayout {
         fab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.plus))
         super.addView(fab, 0, fabLayoutParams)
         fab.setOnClickListener {
-            if(!isMenuAnimating) {
+            if (!isMenuAnimating) {
                 drawMenu()
             }
         }
@@ -101,11 +101,15 @@ class ArcMenu : FrameLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
-        override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+    var isLayoutParamNeedToSet = true
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if(isLayoutParamNeedToSet) {
                 fab.layoutParams = fabLayoutParams
+                isLayoutParamNeedToSet = false
             }
+        }
     }
 
     private fun drawMenu() {
@@ -134,8 +138,8 @@ class ArcMenu : FrameLayout {
         val eachAngle = calculateSubMenuAngle()
         var angleForChild = START_MENU_ANGLE
         listOfTabs.forEach {
-            val childX = ((fab.x + (fab.width/2).toFloat()) - (currentRadius * Math.cos(Math.toRadians(angleForChild))).toFloat())
-            val childY = ((fab.y + (fab.height/2).toFloat()) + (currentRadius * Math.sin(Math.toRadians(angleForChild))).toFloat())
+            val childX = ((fab.x + (fab.width / 2).toFloat()) - (currentRadius * Math.cos(Math.toRadians(angleForChild))).toFloat())
+            val childY = ((fab.y + (fab.height / 2).toFloat()) + (currentRadius * Math.sin(Math.toRadians(angleForChild))).toFloat())
             backgroundPaint.color = it.selectedColor
             canvas?.drawCircle(childX, childY, calculateCircleSize(), backgroundPaint)
             if (currentRadius >= (calculateRadius().toFloat() - (calculateRadius().toFloat() / 3)) && isMenuOpen) {
@@ -149,7 +153,7 @@ class ArcMenu : FrameLayout {
 
     private fun animateOpenMenu() {
         ValueAnimator.ofFloat(0f, calculateRadius().toFloat()).apply {
-            duration = ANIMATION_DURATON
+            duration = ANIMATION_DURATION
             interpolator = PathInterpolatorCompat.create(CONTROL_X1, CONTROL_Y1, CONTROL_X2, CONTROL_Y2)
             addUpdateListener {
                 currentRadius = animatedValue as Float
@@ -169,7 +173,7 @@ class ArcMenu : FrameLayout {
 
     private fun animateCloseMenu() {
         ValueAnimator.ofFloat(calculateRadius().toFloat(), 0f).apply {
-            duration = ANIMATION_DURATON
+            duration = ANIMATION_DURATION
             interpolator = FastOutLinearInInterpolator()
             addUpdateListener {
                 currentRadius = animatedValue as Float
@@ -195,12 +199,12 @@ class ArcMenu : FrameLayout {
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if(circleSubMenu.isEmpty()) {
+        if (circleSubMenu.isEmpty()) {
             calculateSubMenu()
         }
-        when(event?.action) {
+        when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
-                if(isMenuOpen) {
+                if (isMenuOpen) {
                     click(event.x, event.y)
                 }
             }
@@ -208,28 +212,20 @@ class ArcMenu : FrameLayout {
         return super.onTouchEvent(event)
     }
 
-
     private fun click(x: Float, y: Float) {
         circleSubMenu.forEachIndexed { index, circleSubMenu ->
-            if((circleSubMenu.x-circleSubMenu.radius) <= x && x <= (circleSubMenu.x+circleSubMenu.radius)) {
-                if((circleSubMenu.y-circleSubMenu.radius) <= y && y <= (circleSubMenu.y+circleSubMenu.radius)) {
+            if ((circleSubMenu.x - circleSubMenu.radius) <= x && x <= (circleSubMenu.x + circleSubMenu.radius)) {
+                if ((circleSubMenu.y - circleSubMenu.radius) <= y && y <= (circleSubMenu.y + circleSubMenu.radius)) {
                     arcMenuListener?.onClick(index)
                 }
             }
         }
     }
 
-    private val animationListener = object : Animator.AnimatorListener {
-        override fun onAnimationRepeat(animation: Animator?) {
-
-        }
+    private val animationListener = object : AnimatorListenerAdapter() {
 
         override fun onAnimationEnd(animation: Animator?) {
             isMenuAnimating = false
-        }
-
-        override fun onAnimationCancel(animation: Animator?) {
-
         }
 
         override fun onAnimationStart(animation: Animator?) {

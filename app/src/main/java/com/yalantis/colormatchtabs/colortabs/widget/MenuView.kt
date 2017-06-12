@@ -28,6 +28,7 @@ class MenuView : LinearLayout {
 
     private var radius = 0f
     private val backgroundPaint: Paint = Paint()
+    private var isMenuOpen = false
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -37,8 +38,20 @@ class MenuView : LinearLayout {
         backgroundPaint.color = ContextCompat.getColor(context, R.color.colorWhite)
     }
 
-    fun animateBackground(isMenuOpen: Boolean) {
-        visibility = View.VISIBLE
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        super.onLayout(changed, l, t, r, b)
+        animateBackground(isMenuOpen)
+    }
+
+    fun animateView(isMenuOpen: Boolean) {
+        this.isMenuOpen = isMenuOpen
+        if (isMenuOpen) {
+            visibility = View.VISIBLE
+        }
+        animateBackground(isMenuOpen)
+    }
+
+    private fun animateBackground(isMenuOpen: Boolean) {
         val start = if (isMenuOpen) 0f else (height.toFloat() * 2)
         val end = if (isMenuOpen) (height.toFloat() * 2) else 0f
         ValueAnimator.ofFloat(start, end).apply {
@@ -55,7 +68,9 @@ class MenuView : LinearLayout {
                         getChildAt(0).visibility = View.GONE
                     } else {
                         getChildAt(0).visibility = View.VISIBLE
+                        getChildAt(0).alpha = 0f
                     }
+                    animatePlayButton(isMenuOpen)
                 }
 
                 override fun onAnimationEnd(animation: Animator?) {
@@ -66,6 +81,13 @@ class MenuView : LinearLayout {
                 }
             })
         }.start()
+    }
+
+    private fun animatePlayButton(isVisible: Boolean) {
+        getChildAt(0).animate()
+                .alpha(if (isVisible) 1f else 0f)
+                .setDuration(ANIMATION_DURATION)
+                .start()
     }
 
     override fun onDraw(canvas: Canvas?) {

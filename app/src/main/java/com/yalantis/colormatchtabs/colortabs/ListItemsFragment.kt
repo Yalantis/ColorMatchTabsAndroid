@@ -19,7 +19,7 @@ class ListItemsFragment : Fragment() {
         fun newInstance() = ListItemsFragment()
     }
 
-    private val listOfPictures by lazy { listOf(BASE_SCHEME + R.drawable.eat, BASE_SCHEME + R.drawable.coffe)}
+    private val listOfPictures by lazy { listOf(BASE_SCHEME + R.drawable.eat, BASE_SCHEME + R.drawable.coffe) }
     private val listOfDishName by lazy { listOf(context.getString(R.string.caesar), context.getString(R.string.latte)) }
     private val listOfRestaurant by lazy { listOf(context.getString(R.string.cafe), context.getString(R.string.stareducks)) }
 
@@ -37,7 +37,7 @@ class ListItemsFragment : Fragment() {
 
     private fun createListItems(): List<Menu> {
         val list = mutableListOf<Menu>()
-        for(i in 0..5) {
+        for (i in 0..5) {
             val index = i.rem(2)
             list.add(Menu(listOfPictures[index], listOfDishName[index], listOfRestaurant[index], context.getString(R.string.caesar_review)))
         }

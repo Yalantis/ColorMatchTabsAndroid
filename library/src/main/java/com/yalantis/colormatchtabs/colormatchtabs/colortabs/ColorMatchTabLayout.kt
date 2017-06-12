@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.TypedArray
 import android.util.AttributeSet
+import android.util.Log
 import android.view.WindowManager
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
@@ -23,22 +24,48 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         private const val INVALID_WIDTH = -1
     }
 
-    internal lateinit var tabStrip: SlidingTabStrip
+    internal lateinit var tabStripLayout: SlidingTabStripLayout
     internal var tabs: MutableList<ColorTab> = mutableListOf()
     private var tabSelectedListener: OnColorTabSelectedListener? = null
     internal var internalSelectedTab: ColorTab? = null
     internal var tabMaxWidth = Integer.MAX_VALUE
     internal var previousSelectedTab: ColorTabView? = null
-    var selectedTabIndex: Int = 0
+
+    /**
+     * Set selected ColorTab width in portrait orientation. Default max tab width is 146dp
+     */
+    var selectedTabWidth = getDimen(R.dimen.tab_max_width)
+
+    /**
+     * Set selected ColorTab width in horizontal orientation. Default max tab width is 146dp
+     */
+    var selectedTabHorizontalWidth = getDimen(R.dimen.tab_max_width_horizontal)
+
+    /**
+     * Sets selected ColorTab by position
+     */
+    var selectedTabIndex: Int = -1
         set(value) {
             field = value
             select(getTabAt(value))
         }
+
+    /**
+     * Sets selected ColorTab
+     */
     var selectedTab: ColorTab? = null
         set(value) {
             field = value
             select(value)
         }
+
+    /**
+     * Returns the position of the current selected tab.
+     *
+     * @return selected tab position, or {@code -1} if there isn't a selected tab.
+     */
+    var selectedTabPosition: Int = -1
+        get() = internalSelectedTab?.position ?: -1
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -48,16 +75,19 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     private fun initLayout(attrs: AttributeSet?, defStyleAttr: Int) {
         isHorizontalScrollBarEnabled = false
-        tabStrip = SlidingTabStrip(context)
-        super.addView(tabStrip, 0, LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        tabStripLayout = SlidingTabStripLayout(context)
+        super.addView(tabStripLayout, 0, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorMatchTabLayout)
         initViewTreeObserver(typedArray)
     }
 
-    fun initViewTreeObserver(typedArray: TypedArray) {
-        typedArray.getDimensionPixelSize(R.styleable.TabLayout_tabMinWidth,
-                INVALID_WIDTH)
+    private fun initViewTreeObserver(typedArray: TypedArray) {
+        if(typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabWidth, INVALID_WIDTH) != INVALID_WIDTH) {
+            selectedTabWidth = typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabWidth, INVALID_WIDTH)
+        }
+        if(typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabHorizontalWidth, INVALID_WIDTH) != INVALID_WIDTH) {
+            selectedTabHorizontalWidth = typedArray.getDimensionPixelSize(R.styleable.ColorMatchTabLayout_selectedTabHorizontalWidth, INVALID_WIDTH)
+        }
         typedArray.recycle()
     }
 
@@ -68,8 +98,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         val idealHeight = (getDimen(R.dimen.default_height) + paddingTop + paddingBottom)
         when (MeasureSpec.getMode(heightMeasureSpec)) {
             MeasureSpec.AT_MOST -> heightMeasureSpec = MeasureSpec.makeMeasureSpec(
-                    Math.min(idealHeight, MeasureSpec.getSize(heightMeasureSpec)),
-                    MeasureSpec.EXACTLY)
+                    Math.min(idealHeight, MeasureSpec.getSize(heightMeasureSpec)), MeasureSpec.EXACTLY)
             MeasureSpec.UNSPECIFIED -> heightMeasureSpec = MeasureSpec.makeMeasureSpec(idealHeight, MeasureSpec.EXACTLY)
         }
 
@@ -77,7 +106,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
             // If we don't have an unspecified width spec, use the given size to calculate
             // the max tab width
             val systemService = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val selectTabWidth = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) getDimen(R.dimen.tab_max_width) else getDimen(R.dimen.tab_max_width_horizontal)
+            val selectTabWidth = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) selectedTabWidth else selectedTabHorizontalWidth
             val probable = (systemService.defaultDisplay.width - selectTabWidth) / (tabs.size - 1)
             tabMaxWidth = if (probable < getDimen(R.dimen.default_width)) getDimen(R.dimen.default_width) else probable
 
@@ -88,6 +117,11 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     }
 
+    /**
+     * Method add color tab to this layout. The tab will be added at the end of the list.
+     * If this is the first tab to be added it will become the selected tab.
+     * @param tab ColorTab to add
+     */
     fun addTab(tab: ColorTab) {
         tab.isSelected = tabs.isEmpty()
         if (tab.isSelected) {
@@ -98,9 +132,16 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     private fun addColorTabView(tab: ColorTab) {
         configureTab(tab, tabs.size)
-        tabStrip.addView(tab.tabView, tab.position, createLayoutParamsForTabs())
+        tabStripLayout.addView(tab.tabView, tab.position, createLayoutParamsForTabs())
     }
 
+    /**
+     * Create and return new {@link ColorTab}. You need to manually add this using
+     * {@link #addTab(ColorTab)} or a related method. For customize created tab use {@link ColorTabAdapter}
+     *
+     * @return A new ColorTab
+     * @see #addTab(ColorTab)
+     */
     fun newTab() = ColorTab().apply {
         tabView = createTabView(this)
     }
@@ -115,7 +156,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
         val count = tabs.size
         for (i in position + 1..count - 1) {
-            tabs.get(i).position = i
+            tabs[i].position = i
         }
     }
 
@@ -130,8 +171,16 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         lp.width = LinearLayout.LayoutParams.WRAP_CONTENT
     }
 
+    /**
+     * Returns the number of tabs currently registered in layout.
+     *
+     *  @return ColorTab count
+     */
     fun count() = tabs.size
 
+    /**
+     * Returns the tab at the specified index.
+     */
     fun getTabAt(index: Int): ColorTab? {
         if (index < 0 || index >= count()) {
             return null
@@ -142,7 +191,7 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
 
     internal fun setScrollPosition(position: Int, positionOffset: Float, updateSelectedText: Boolean) {
         val roundedPosition = Math.round(position + positionOffset)
-        if (roundedPosition < 0 || roundedPosition >= tabStrip.childCount) {
+        if (roundedPosition < 0 || roundedPosition >= tabStripLayout.childCount) {
             return
         }
 
@@ -152,15 +201,19 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         }
     }
 
+    /**
+     * Add {@link OnColorTabSelectedListener}
+     * @param tabSelectedListener listener to add
+     */
     fun addOnColorTabSelectedListener(tabSelectedListener: OnColorTabSelectedListener) {
         this.tabSelectedListener = tabSelectedListener
     }
 
     private fun setSelectedTabView(position: Int) {
-        val tabCount = tabStrip.childCount
+        val tabCount = tabStripLayout.childCount
         if (position < tabCount) {
             (0..tabCount - 1).map {
-                val child = tabStrip.getChildAt(it)
+                val child = tabStripLayout.getChildAt(it)
                 child.isSelected = it == position
             }
         }
@@ -172,21 +225,31 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
         } else {
             previousSelectedTab = getSelectedTabView()
             internalSelectedTab?.isSelected = false
+            tabSelectedListener?.onUnselectedTab(internalSelectedTab)
             internalSelectedTab = colorTab
             internalSelectedTab?.isSelected = true
+            tabSelectedListener?.onSelectedTab(colorTab)
         }
-        tabSelectedListener?.onSelectedTab(colorTab)
     }
 
-    internal fun getSelectedTabView() = tabStrip.getChildAt(internalSelectedTab?.position ?: 0) as ColorTabView?
+    internal fun getSelectedTabView() = tabStripLayout.getChildAt(internalSelectedTab?.position ?: 0) as ColorTabView?
 
+    /**
+     * Add {@link ArcMenu}
+     */
     fun addArcMenu(arcMenu: ArcMenu) = arcMenu.apply {
         arcMenu.listOfTabs = tabs
-        arcMenu.menuToggleListener = tabStrip.menuToggleListener
+        arcMenu.menuToggleListener = tabStripLayout.menuToggleListener
     }
 
-    override fun onOpenMenu() = tabStrip.onOpenMenu()
+    /**
+     * Call when ArcMenu is open
+     */
+    override fun onOpenMenu() = tabStripLayout.onOpenMenu()
 
-    override fun onCloseMenu() = tabStrip.onCloseMenu()
+    /**
+     * Call when ArcMenu is closed
+     */
+    override fun onCloseMenu() = tabStripLayout.onCloseMenu()
 
 }
