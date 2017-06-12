@@ -32,12 +32,12 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     internal var previousSelectedTab: ColorTabView? = null
 
     /**
-     * Set selected ColorTab width in portrait orientation. Default max tab width is 146dp
+     * Sets selected ColorTab width in portrait orientation. Default max tab width is 146dp
      */
     var selectedTabWidth = getDimen(R.dimen.tab_max_width)
 
     /**
-     * Set selected ColorTab width in horizontal orientation. Default max tab width is 146dp
+     * Sets selected ColorTab width in horizontal orientation. Default max tab width is 146dp
      */
     var selectedTabHorizontalWidth = getDimen(R.dimen.tab_max_width_horizontal)
 
@@ -243,12 +243,12 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     }
 
     /**
-     * Call when ArcMenu is open
+     * Gets called when ArcMenu is open
      */
     override fun onOpenMenu() = tabStripLayout.onOpenMenu()
 
     /**
-     * Call when ArcMenu is closed
+     * Gets called when ArcMenu is closed
      */
     override fun onCloseMenu() = tabStripLayout.onCloseMenu()
 
