@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.widget.Toast
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
+import com.yalantis.colormatchtabs.colormatchtabs.menu.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.adapter.ColorTabAdapter
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.ColorTabLayoutOnPageChangeListener
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnArcMenuListener
@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 
         viewPager.adapter = ColorTabsAdapter(supportFragmentManager, colorMatchTabLayout.count())
         viewPager.addOnPageChangeListener(ColorTabLayoutOnPageChangeListener(colorMatchTabLayout))
-        //TODO think how change this ugly methods!!
         viewPager.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGreen))
         viewPager.background.alpha = 128
         colorMatchTabLayout.addArcMenu(arcMenu)
