@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.WindowManager
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
-import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
+import com.yalantis.colormatchtabs.colormatchtabs.menu.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedListener
 import com.yalantis.colormatchtabs.colormatchtabs.menu.ArcMenu

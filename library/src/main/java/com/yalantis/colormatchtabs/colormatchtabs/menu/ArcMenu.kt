@@ -20,7 +20,7 @@ import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import com.yalantis.colormatchtabs.colormatchtabs.Constant
 import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_DURATION
-import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
+import com.yalantis.colormatchtabs.colormatchtabs.menu.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnArcMenuListener
 import com.yalantis.colormatchtabs.colormatchtabs.model.CircleSubMenu

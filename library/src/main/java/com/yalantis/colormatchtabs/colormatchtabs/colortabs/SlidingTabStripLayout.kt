@@ -14,9 +14,9 @@ import android.view.Gravity
 import android.widget.LinearLayout
 import com.yalantis.colormatchtabs.colormatchtabs.Constant
 import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_DURATION
-import com.yalantis.colormatchtabs.colormatchtabs.MenuToggleListener
+import com.yalantis.colormatchtabs.colormatchtabs.menu.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
-import com.yalantis.colormatchtabs.colormatchtabs.utils.InvalidNumberOfTabs
+import com.yalantis.colormatchtabs.colormatchtabs.utils.InvalidNumberOfTabsExeption
 import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimen
 import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimenToFloat
 
@@ -149,7 +149,7 @@ class SlidingTabStripLayout : LinearLayout, MenuToggleListener {
         if ((parent as ColorMatchTabLayout).tabs.count() <= INVALID_TABS_AMOUNT && (parent as ColorMatchTabLayout).tabs.count() > 2) {
             animateIconTabs(0f, (height * 2).toFloat())
         } else {
-            throw InvalidNumberOfTabs()
+            throw InvalidNumberOfTabsExeption()
         }
     }
 
