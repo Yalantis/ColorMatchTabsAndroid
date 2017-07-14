@@ -27,4 +27,8 @@ out/
 build/
 .gradle/
 
+.keystore/
+app-release.apk
+
 .DS_Store
+
