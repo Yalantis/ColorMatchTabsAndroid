@@ -6,6 +6,8 @@
 
 Check this [project on dribbble](https://dribbble.com/shots/2702517-Review-App-Concept)
 
+<img src="color-tabs-gif.gif"/>
+
 ## Requirements
 - Android SDK 16+
 
