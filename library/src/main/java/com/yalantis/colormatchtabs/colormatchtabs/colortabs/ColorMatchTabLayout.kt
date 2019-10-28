@@ -14,6 +14,7 @@ import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnColorTabSelectedLi
 import com.yalantis.colormatchtabs.colormatchtabs.menu.ArcMenu
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab
 import com.yalantis.colormatchtabs.colormatchtabs.utils.getDimen
+import java.lang.IllegalArgumentException
 
 /**
  * Created by anna on 10.05.17.
@@ -92,6 +93,8 @@ class ColorMatchTabLayout : HorizontalScrollView, MenuToggleListener {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, originHeightMeasureSpec: Int) {
+        if (tabs.size < 2)
+            throw IllegalArgumentException("Layout must contain at least 2 tabs")
         var heightMeasureSpec = originHeightMeasureSpec
         // If we have a MeasureSpec which allows us to decide our height, try and use the default
         // height
