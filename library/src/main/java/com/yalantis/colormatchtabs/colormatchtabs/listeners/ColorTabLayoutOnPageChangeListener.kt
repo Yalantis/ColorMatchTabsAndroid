@@ -1,8 +1,8 @@
 package com.yalantis.colormatchtabs.colormatchtabs.listeners
 
-import android.support.v4.view.ViewPager
-import android.support.v4.view.ViewPager.SCROLL_STATE_IDLE
-import android.support.v4.view.ViewPager.SCROLL_STATE_SETTLING
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE
+import androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING
 import com.yalantis.colormatchtabs.colormatchtabs.colortabs.ColorMatchTabLayout
 import java.lang.ref.WeakReference
 
