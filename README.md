@@ -26,7 +26,7 @@ allprojects {
 Add the dependency:
 ```Groovy
 dependencies {
-	compile 'com.github.Yalantis:ColorMatchTabsAndroid:v0.0.1'
+	implementation 'com.github.Yalantis:ColorMatchTabsAndroid:v0.0.2'
 }
 ```
 
