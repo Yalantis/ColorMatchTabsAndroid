@@ -8,10 +8,10 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
-import android.support.v4.view.animation.PathInterpolatorCompat
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.LinearLayout
+import androidx.core.view.animation.PathInterpolatorCompat
 import com.yalantis.colormatchtabs.colormatchtabs.Constant
 import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_DURATION
 import com.yalantis.colormatchtabs.colormatchtabs.menu.MenuToggleListener
@@ -105,12 +105,12 @@ class SlidingTabStripLayout : LinearLayout, MenuToggleListener {
             }
             addListener(object : AnimatorListenerAdapter() {
 
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     child?.clickedTabView = null
                     isAnimate = false
                 }
 
-                override fun onAnimationStart(animation: Animator?) {
+                override fun onAnimationStart(animation: Animator) {
                     isAnimate = true
                 }
             })
@@ -172,13 +172,13 @@ class SlidingTabStripLayout : LinearLayout, MenuToggleListener {
             }
             addListener(object : AnimatorListenerAdapter() {
 
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     isMenuToggle = false
                 }
 
-                override fun onAnimationStart(animation: Animator?) {
+                override fun onAnimationStart(animation: Animator) {
                     if (end == 0f) {
-                        (parent as ColorMatchTabLayout).tabs?.forEach {
+                        (parent as ColorMatchTabLayout).tabs.forEach {
                             it.icon?.setBounds(0, 0, it.icon?.intrinsicWidth ?: 0, it.icon?.intrinsicHeight ?: 0)
                         }
                         (0..childCount - 1).forEach {

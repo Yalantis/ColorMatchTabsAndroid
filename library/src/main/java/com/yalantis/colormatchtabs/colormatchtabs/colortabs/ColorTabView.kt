@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import android.support.v7.app.ActionBar
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -16,6 +15,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.ActionBar
 import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_TEXT_APPEARANCE_DURATION
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.model.ColorTab

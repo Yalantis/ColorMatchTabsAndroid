@@ -9,18 +9,16 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.os.Build
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.animation.FastOutLinearInInterpolator
-import android.support.v4.view.animation.PathInterpolatorCompat
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
-import com.yalantis.colormatchtabs.colormatchtabs.Constant
+import androidx.core.content.ContextCompat
+import androidx.core.view.animation.PathInterpolatorCompat
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yalantis.colormatchtabs.colormatchtabs.Constant.Companion.ANIMATION_DURATION
-import com.yalantis.colormatchtabs.colormatchtabs.menu.MenuToggleListener
 import com.yalantis.colormatchtabs.colormatchtabs.R
 import com.yalantis.colormatchtabs.colormatchtabs.listeners.OnArcMenuListener
 import com.yalantis.colormatchtabs.colormatchtabs.model.CircleSubMenu
@@ -54,9 +52,9 @@ class ArcMenu : FrameLayout {
     private var arcMenuListener: OnArcMenuListener? = null
     private var isMenuAnimating: Boolean = false
 
-    constructor(context: Context?) : this(context, null)
-    constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context) : this(context, null)
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         setBackgroundColor(Color.TRANSPARENT)
         initCanvas()
         initFab()
@@ -127,21 +125,21 @@ class ArcMenu : FrameLayout {
         isMenuOpen = !isMenuOpen
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (currentRadius != 0f) {
             layoutChildrenArc(canvas)
         }
     }
 
-    private fun layoutChildrenArc(canvas: Canvas?) {
+    private fun layoutChildrenArc(canvas: Canvas) {
         val eachAngle = calculateSubMenuAngle()
         var angleForChild = START_MENU_ANGLE
         listOfTabs.forEach {
             val childX = ((fab.x + (fab.width / 2).toFloat()) - (currentRadius * Math.cos(Math.toRadians(angleForChild))).toFloat())
             val childY = ((fab.y + (fab.height / 2).toFloat()) + (currentRadius * Math.sin(Math.toRadians(angleForChild))).toFloat())
             backgroundPaint.color = it.selectedColor
-            canvas?.drawCircle(childX, childY, calculateCircleSize(), backgroundPaint)
+            canvas.drawCircle(childX, childY, calculateCircleSize(), backgroundPaint)
             if (currentRadius >= (calculateRadius().toFloat() - (calculateRadius().toFloat() / 3)) && isMenuOpen) {
                 animateDrawableAppears(childX, childY, it, canvas)
             }
@@ -163,7 +161,7 @@ class ArcMenu : FrameLayout {
         }.start()
     }
 
-    private fun animateDrawableAppears(childX: Float, childY: Float, tab: ColorTab, canvas: Canvas?) {
+    private fun animateDrawableAppears(childX: Float, childY: Float, tab: ColorTab, canvas: Canvas) {
         val left = childX.toInt() - ((tab.icon?.intrinsicWidth ?: 0) / 2)
         val top = childY.toInt() - ((tab.icon?.intrinsicHeight ?: 0) / 2)
         tab.icon?.setColorFilter(getColor(R.color.mainBackgroundColor), PorterDuff.Mode.SRC_ATOP)
@@ -224,11 +222,11 @@ class ArcMenu : FrameLayout {
 
     private val animationListener = object : AnimatorListenerAdapter() {
 
-        override fun onAnimationEnd(animation: Animator?) {
+        override fun onAnimationEnd(animation: Animator) {
             isMenuAnimating = false
         }
 
-        override fun onAnimationStart(animation: Animator?) {
+        override fun onAnimationStart(animation: Animator) {
             isMenuAnimating = true
         }
     }

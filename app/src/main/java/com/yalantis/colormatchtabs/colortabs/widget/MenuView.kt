@@ -6,11 +6,11 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.animation.PathInterpolatorCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.animation.PathInterpolatorCompat
 import com.yalantis.colormatchtabs.colortabs.R
 
 /**
@@ -30,9 +30,9 @@ class MenuView : LinearLayout {
     private val backgroundPaint: Paint = Paint()
     private var isMenuOpen = false
 
-    constructor(context: Context?) : this(context, null)
-    constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context) : this(context, null)
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         setWillNotDraw(false)
         backgroundPaint.flags = Paint.ANTI_ALIAS_FLAG
         backgroundPaint.color = ContextCompat.getColor(context, R.color.colorWhite)
@@ -62,7 +62,7 @@ class MenuView : LinearLayout {
                 invalidate()
             }
             addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationStart(animation: Animator?) {
+                override fun onAnimationStart(animation: Animator) {
                     super.onAnimationStart(animation)
                     if (!isMenuOpen) {
                         getChildAt(0).visibility = View.GONE
@@ -73,7 +73,7 @@ class MenuView : LinearLayout {
                     animatePlayButton(isMenuOpen)
                 }
 
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     if (!isMenuOpen) {
                         visibility = View.GONE
